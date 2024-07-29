@@ -7,9 +7,7 @@ from PIL import Image
 
 import torch
 from torchvision import datasets, transforms, models
-from torch.utils.data import Dataset, DataLoader
-from torchvision.datasets.folder import default_loader
-from torchvision.datasets.utils import download_url
+from torch.utils.data import Dataset, DataLoader, ConcatDataset
 
 from multimodal.multimodal_lit import MultiModalLitModel
 from huggingface_hub import hf_hub_download
@@ -25,9 +23,7 @@ DATASET_ROOTS = {"imagenet_val": "/home/Dataset/xueyi/ImageNet100/val",
 
 
 def get_model(model_name, device):
-    """
-    returns target model and its preprocess function
-    """
+    """returns target model and its preprocess function"""
     if "cvcl" in model_name:  
         print("Loading CVCL")
         if "res" in model_name:
@@ -44,13 +40,7 @@ def get_model(model_name, device):
         model.to(device)
 
     elif "clip" in model_name:
-        if "res" in model_name:
-            backbone = "RN50x4" # ResNeXt-50 32x4d 
-        elif "vit" in model_name:
-            backbone = "ViT-B/16" #  to CVCL ViT-B/14 
-        else:
-            print("Invalid backbone, set to RN50x4")
-            backbone = "RN50x4"
+        backbone = "ViT-L/14" # source: CVCL Supplementary Materials
         model, preprocess = clip.load(f"{backbone}", device=device)
         print(f"Successfully load CLIP-{backbone}")
     
@@ -67,53 +57,128 @@ def get_model(model_name, device):
     
     return model, preprocess
 
+def get_data(dataset_name, preprocess=None, get_attr=False):  
+    if dataset_name == "awa2":
+        data = AnimalDataset(root_dir=DATASET_ROOTS['awa2'],transform=preprocess, use_attr=get_attr)
 
-def get_data(dataset_name, preprocess=None, get_attr=False):
-    if dataset_name == "cifar100_train":
-        data = datasets.CIFAR100(root=os.path.expanduser("~/.cache"), download=True, train=True,
-                                   transform=preprocess)
-
-    elif dataset_name == "cifar100_val":
-        data = datasets.CIFAR100(root=os.path.expanduser("~/.cache"), download=True, train=False, 
-                                   transform=preprocess)
+    elif dataset_name == "cub":
+        data = CUBDataset(root_dir=DATASET_ROOTS['cub'], transform=preprocess, use_attr=get_attr)
         
     elif dataset_name in DATASET_ROOTS.keys():
         data = datasets.ImageFolder(DATASET_ROOTS[dataset_name], preprocess)
 
-    elif dataset_name == "cub_train":
-        data = CUBDataset(root_dir=DATASET_ROOTS["cub"], train=True, transform=preprocess, use_attr=get_attr)
-    elif dataset_name == "cub_test": # use attribute
-        data = CUBDataset(root_dir=DATASET_ROOTS['cub'], train=False, transform=preprocess, use_attr=get_attr)        
+    # elif dataset_name == "cub":
+    #     data = ConcatDataset([CUBDataset(root_dir=DATASET_ROOTS["cub"], train=True, transform=preprocess, use_attr=get_attr), 
+    #                           CUBDataset(root_dir=DATASET_ROOTS['cub'], train=False, transform=preprocess, use_attr=get_attr)])        
+        
+    # elif dataset_name == "imagenet_broden":
+    #     data = ConcatDataset([datasets.ImageFolder(DATASET_ROOTS["imagenet_val"], preprocess), 
+    #                                                  datasets.ImageFolder(DATASET_ROOTS["broden"], preprocess)])
+    # elif dataset_name == "cifar100_train":
+    #     data = datasets.CIFAR100(root=os.path.expanduser("~/.cache"), download=True, train=True,
+    #                                transform=preprocess)
+
+    # elif dataset_name == "cifar100_val":
+    #     data = datasets.CIFAR100(root=os.path.expanduser("~/.cache"), download=True, train=False, 
+    #                                transform=preprocess)
     
-    elif dataset_name == "imagenet_broden":
-        data = torch.utils.data.ConcatDataset([datasets.ImageFolder(DATASET_ROOTS["imagenet_val"], preprocess), 
-                                                     datasets.ImageFolder(DATASET_ROOTS["broden"], preprocess)])
     return data
 
-  
+def clean_class_names(dataset_name, data):
+    class_names = data.classes['class_name'].tolist()
+    if dataset_name == "cub":
+        # generalized zero-shot learning
+        #TODO: maybe not that cleaned due to "_"
+        clean_cls = [name.split(".")[1] for name in class_names]
+    elif dataset_name == "awa2":
+        clean_cls = [name.replace("+", " ") for name in class_names]
+    else:
+        clean_cls = class_names
+    return clean_cls, class_names
+
 class CUBDataset(Dataset):
-    def __init__(self, root_dir, train=True, transform=None, use_attr=False):
-        """
-        root_dir: CUB Directory.
-        train: Boolean indicating if this is the training or test dataset.
-        transform: Optional transform to be applied on a sample.
-        """
+    """This contains all train/test classes in CUB dataset."""
+    def __init__(self, root_dir,  transform=None, use_attr=False):
         self.root_dir = root_dir
         self.transform = transform 
         self.use_attr = use_attr  
         # Load datasets
         self.data_frame = pd.read_csv(os.path.join(root_dir, 'image_class_labels.txt'), sep=' ', header=None, names=['image_id', 'class_id'])
+
+        self.classes = pd.read_csv(os.path.join(root_dir, 'classes.txt'), sep=' ', header=None, names=['class_id', 'class_name'], index_col=0)
+        self.images = pd.read_csv(os.path.join(root_dir, 'images.txt'), sep=' ', header=None, names=['image_index', 'image_path'], index_col=0)
+
+        # Merge with classes to get class names
+        self.data_frame = self.data_frame.merge(self.classes, on='class_id')
+        # Merge with images to get paths
+        self.data_frame = self.data_frame.merge(self.images, left_on='image_id', right_on='image_index')
+
+        if use_attr:
+            #TODO: img_attr_mat weight txt file implementation
+            self.attributes = pd.read_csv(os.path.join(root_dir, 'attributes/image_attribute_labels_clean.txt'), sep='\s+', header=None, names=['image_id', 'attribute_id', 'is_present', 'certainty_id', 'time'], engine='python', on_bad_lines='warn')
+            num_attributes = self.attributes['attribute_id'].max()
+            self.img_attr_tensor = torch.zeros((len(self.images)+1, num_attributes+1, 2), dtype=torch.int8)
+            
+            # Initialize the attribute matrices with an additional row to account for 1-based indexing
+            # self.image_attribute_matrices = np.zeros((len(self.images) + 1, num_attributes + 1, 2))
+            """ Given 3 images with 2 attributes, the matrix:
+            [
+                [[1, 3], [0, 2]],
+                [[0, 1], [1, 4]],
+                [[1, 3], [1, 2]]
+            ]
+            for 1st img, 1st attr, is_present=1, certainty=3
+            note that time column is not used
+            dtype=torch.int8 is used to save memory
+            """ 
+
+            for _, row in self.attributes.iterrows():
+                image_id = int(row['image_id'])
+                attribute_id = int(row['attribute_id'])
+                self.img_attr_tensor[image_id, attribute_id, 0] = int(row['is_present'])
+                self.img_attr_tensor[image_id, attribute_id, 1] = int(row['certainty_id'])
+
+
+    def __len__(self):
+        return len(self.data_frame)
+    
+    def __getitem__(self, idx):
+        image_rel_path = self.data_frame.iloc[idx]['image_path']
+        img_path = os.path.join(self.root_dir, 'images', image_rel_path)
         
+        image = Image.open(img_path)
+        label_id = self.data_frame.iloc[idx]['class_id'] - 1 # 0-based index
+        
+        if image.mode == 'L':
+            image = image.convert('RGB')
+
+        if self.transform:
+            image = self.transform(image)
+        
+        if self.use_attr:
+            image_id = self.data_frame.iloc[idx]['image_id']
+            attributes = self.img_attr_tensor[image_id].to(torch.int8)
+            return image, label_id, attributes
+        else:
+            return image, label_id
+  
+class CUBSplitDataset(Dataset):
+    """This is for train/test split in CUB dataset."""
+    def __init__(self, root_dir, train=True, transform=None, use_attr=False):
+        self.root_dir = root_dir
+        self.transform = transform 
+        self.use_attr = use_attr  
+        # Load datasets
+        self.data_frame = pd.read_csv(os.path.join(root_dir, 'image_class_labels.txt'), sep=' ', header=None, names=['image_id', 'class_id'])
+        # for GZSL, all classes
         self.classes = pd.read_csv(os.path.join(root_dir, 'classes.txt'), sep=' ', header=None, names=['class_id', 'class_name'])
         self.images = pd.read_csv(os.path.join(root_dir, 'images.txt'), sep=' ', header=None, names=['image_index', 'image_path'], index_col=0)
         self.split = pd.read_csv(os.path.join(root_dir, 'train_test_split.txt'), sep=' ', header=None, names=['image_id', 'is_train'])
-
         # Filter by train or test
         if train:
             self.data_frame = self.data_frame[self.split['is_train'] == 1]
         else:
             self.data_frame = self.data_frame[self.split['is_train'] == 0]
-
         # Merge with classes to get class names
         self.data_frame = self.data_frame.merge(self.classes, on='class_id')
         # Merge with images to get paths
@@ -168,60 +233,103 @@ class CUBDataset(Dataset):
         else:
             return image, label_id
 
-
 class AnimalDataset(Dataset):
+  """This contains all train/test class in AWA2 dataset."""
+  def __init__(self, root_dir, transform=None, use_attr=False, continuous=False):
+    self.root_dir = root_dir
+    self.use_attr = use_attr     
+    self.transform = transform
+    # for GZSL, all classes
+    self.classes = pd.read_csv(os.path.join(root_dir, 'classes.txt'), sep='\t', header=None, names=['class_index', 'class_name'])
+
+    if use_attr:
+        if continuous:
+            self.cls_attr_mat = np.array(np.genfromtxt(os.path.join(root_dir,'predicate-matrix-continuous.txt', dtype='float')))
+        else:
+            self.cls_attr_mat = np.array(np.genfromtxt(os.path.join(root_dir,'predicate-matrix-binary.txt', dtype='int')))
+    
+    img_names = []
+    img_index = []
+    for _, row in self.classes.iterrows():
+        class_index = row['class_index']  # 1-based index
+        class_name = row['class_name']
+        FOLDER_DIR = os.path.join(root_dir, 'JPEGImages', class_name) 
+        file_descriptor = os.path.join(FOLDER_DIR, '*.jpg')
+        files = glob(file_descriptor)
+
+        for file_name in files:
+            img_names.append(file_name)
+            img_index.append(class_index)
+
+    self.img_names = img_names
+    self.img_index = img_index
+
+  def __getitem__(self, idx):
+    im = Image.open(self.img_names[idx])
+    if im.getbands()[0] == 'L':
+      im = im.convert('RGB')
+    if self.transform:
+      im = self.transform(im)
+
+    im_index = self.img_index[idx] -1 # 0-based index
+    if self.use_attr:
+        im_attr = self.cls_attr_mat[im_index,:]
+        return im, im_index, im_attr
+    else:
+        return im, im_index
+
+  def __len__(self):
+    return len(self.img_names)
+
+class AWASplitDataset(Dataset):
+  """This is for train/test split in AWA2 dataset."""
   def __init__(self, root_dir, train=True, transform=None, use_attr=False, continuous=False):
     self.root_dir = root_dir
     self.use_attr = use_attr     
     self.transform = transform
-    
+    # for GZSL, all classes
+    self.classes = pd.read_csv(os.path.join(root_dir, 'classes.txt'), sep='\t', header=None, names=['class_index', 'class_name'])
+
     if use_attr:
         if continuous:
             self.cls_attr_mat = np.array(np.genfromtxt(os.path.join(root_dir,'predicate-matrix-continuous.txt', dtype='float')))
         else:
             self.cls_attr_mat = np.array(np.genfromtxt(os.path.join(root_dir,'predicate-matrix-binary.txt', dtype='int')))
 
+    if train:
+        classes_file = 'trainclasses.txt'
+    else:
+        classes_file = 'testclasses.txt'
     
-    self.classes = pd.read_csv(os.path.join(root_dir, 'classes.txt'), sep=' ', header=None, names=['class_id', 'class_name'])
-
-    class_to_index = dict()
-    # Build dictionary of indices to classes
-    with open('classes.txt') as f:
-      index = 0
-      for line in f:
-        class_name = line.split('\t')[1].strip()
-        class_to_index[class_name] = index
-        index += 1
-    self.class_to_index = class_to_index
-
     img_names = []
     img_index = []
-    with open('data/{}'.format(classes_file)) as f:
+    with open(os.path.join(root_dir, classes_file)) as f:
       for line in f:
         class_name = line.strip()
-        FOLDER_DIR = os.path.join('data/JPEGImages', class_name)
+        FOLDER_DIR = os.path.join(root_dir, 'JPEGImages', class_name)
         file_descriptor = os.path.join(FOLDER_DIR, '*.jpg')
         files = glob(file_descriptor)
 
-        class_index = class_to_index[class_name]
+        class_index = self.classes['class_name']
         for file_name in files:
           img_names.append(file_name)
           img_index.append(class_index)
     self.img_names = img_names
     self.img_index = img_index
 
-  def __getitem__(self, index):
-    im = Image.open(self.img_names[index])
+  def __getitem__(self, idx):
+    im = Image.open(self.img_names[idx])
     if im.getbands()[0] == 'L':
       im = im.convert('RGB')
     if self.transform:
       im = self.transform(im)
-    if im.shape != (3,224,224):
-      print(self.img_names[index])
 
-    im_index = self.img_index[index]
-    im_predicate = self.predicate_binary_mat[im_index,:]
-    return im, im_predicate, self.img_names[index], im_index
+    im_index = self.img_index[idx] # class index
+    if self.use_attr:
+        im_predicate = self.cls_attr_mat[im_index,:]
+        return im, im_predicate, im_index
+    else:
+        return im, im_index
 
   def __len__(self):
     return len(self.img_names)
