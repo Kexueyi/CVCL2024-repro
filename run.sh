@@ -1,6 +1,11 @@
-python zs_base.py --batch_size 512 --device cuda:1 &
-python zs_base.py --model clip --batch_size 256 --device cuda:0
+# python main.py --batch_size 512 --device cuda:1 &
+# python main.py --model clip --batch_size 512 --device cuda:0
+python main.py --model cvcl_res --use_attr True
+python main.py --model cvcl_vit --use_attr True
+python main.py --model clip --use_attr True
 
-sleep 10
+python main.py --model cvcl_res --use_attr True --prefix "a photo of a "
+python main.py --model cvcl_vit --use_attr True --prefix "a photo of a "
+python main.py --model clip --use_attr True --prefix "a photo of a "
 
-python zs_base.py --model cvcl_vit --batch_size 512 --device cuda:0
+

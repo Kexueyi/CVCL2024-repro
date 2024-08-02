@@ -162,23 +162,28 @@ class MultiModalLitModel(pl.LightningModule):
 
     def tokenize(self, texts):
         """Tokenize texts to obtain tokens and token lengths"""
-        max_seq_len = 23 #modified from 25 to adapt to cvcl_vit
+        max_seq_len = 23  # Modified from 25 to adapt to cvcl_vit
 
         if isinstance(texts, str):
             texts = [texts]
 
         all_tokens = []
+        token_lengths = [] # modified ===>
         for text in texts:
-            # crop text to each word
             doc = self.nlp(text)
-            # tokenize
             tokens = [token.text for token in doc]
-            tokens = [self.vocab["<sos>"]] + [self.vocab.get(token, self.vocab["<unk>"]) for token in tokens] + [self.vocab["<eos>"]] + [self.vocab["<pad>"]] * (max_seq_len - len(tokens))
+            # Start and end tokens added here
+            tokens = [self.vocab["<sos>"]] + [self.vocab.get(token, self.vocab["<unk>"]) for token in tokens] + [self.vocab["<eos>"]]
+            # Calculate effective length before padding
+            effective_length = min(len(tokens), max_seq_len)
+            tokens = tokens[:effective_length]  # Truncate if necessary
+            tokens += [self.vocab["<pad>"]] * (max_seq_len - effective_length)  # Pad the tokens to max_seq_len
             all_tokens.append(tokens)
+            token_lengths.append(effective_length)
 
         tokens = torch.tensor(all_tokens, dtype=torch.long)
-        token_lengths = torch.tensor([len(text) + 2 for text in texts], dtype=torch.long)
-        return tokens, token_lengths
+        token_lengths = torch.tensor(token_lengths, dtype=torch.long) # modified <====
+        return tokens, token_lengths 
     # def tokenize(self, texts):
     #     """Tokenize texts to obtain tokens and token lengths"""
     #     max_seq_len = 25
