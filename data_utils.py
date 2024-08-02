@@ -18,9 +18,9 @@ import clip
 # dataset path
 DATASET_ROOTS = {"imagenet_val": "/home/Dataset/xueyi/ImageNet100/val",
                 "broden": "/home/xke001/demo/NetDissect-Lite/dataset/broden1_224/images",
-                "cub": "/home/xke001/demo/zero-shot/data/CUB/CUB_200_2011",
-                "awa2": "/home/Dataset/xueyi/Animals_with_Attributes2",
-                "konk": "/home/Dataset/xueyi/Konklab/17-objects",
+                "cub": "/home/project/12003885/data/CUB/CUB_200_2011",
+                "awa2": "/home/project/12003885/data/Animals_with_Attributes2",
+                "konk": "/home/project/12003885/data/17-objects",
                 "konk_example": "/home/xke001/demo/CLIP-dissect/data/toy_example_dataset_konka"}
 
 
