@@ -4,8 +4,17 @@ python main.py --model cvcl_res --use_attr True
 python main.py --model cvcl_vit --use_attr True
 python main.py --model clip --use_attr True
 
+python main.py --model cvcl_res --use_attr False 
+python main.py --model cvcl_vit --use_attr False 
+python main.py --model clip --use_attr False 
+
 python main.py --model cvcl_res --use_attr True --prefix "a photo of a "
 python main.py --model cvcl_vit --use_attr True --prefix "a photo of a "
 python main.py --model clip --use_attr True --prefix "a photo of a "
+
+python main.py --model cvcl_res --use_attr False --prefix "a photo of a "
+python main.py --model cvcl_vit --use_attr False --prefix "a photo of a "
+python main.py --model clip --use_attr False --prefix "a photo of a "
+
 
 
