@@ -27,7 +27,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='CVCL-ZeroShot')
     parser.add_argument('--model', type=str, default='cvcl_res', help='Model name')
     parser.add_argument('--dataset', type=str, default='awa2', help='Dataset name')
-    parser.add_argument('--class_file_path', type=str, default='test.txt', help='Relative Path to class file under dataset folder')
+    parser.add_argument('--class_file_path', type=str, default='classes.txt', help='Relative Path to class file under dataset folder')
     parser.add_argument('--baby_vocab', type=bool, default=True, help='Use baby_vocab or not')
     parser.add_argument('--use_attr', type=bool, default=True, help='Use attributes or not')
     parser.add_argument('--top_n_desc', type=int, default=5, help='Number of top descriptions to use')
