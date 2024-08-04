@@ -5,11 +5,11 @@ import numpy as np
 from glob import glob
 from PIL import Image
 from pathlib import Path
-import re
+import json
 
 import torch
-from torchvision import datasets, transforms, models
-from torch.utils.data import Dataset, DataLoader, ConcatDataset
+from torchvision import datasets
+from torch.utils.data import Dataset, ConcatDataset
 
 from multimodal.multimodal_lit import MultiModalLitModel
 from huggingface_hub import hf_hub_download
@@ -60,11 +60,11 @@ def get_model(model_name, device):
     
     return model, preprocess
 
-def get_dataset(dataset_name, preprocess=None, class_file_path='classes.txt', get_attr=False):
+def get_dataset(dataset_name, preprocess=None, class_file_path='classes.txt',baby_vocab=False, get_attr=False, top_n_desc=None):
     # dictionary of dataset configurations
     print(f"Loading dataset: {dataset_name}")
     dataset_configs = {
-        'awa2': (AnimalDataset, {'root_dir': DATASET_ROOTS['awa2'], 'transform': preprocess, 'class_file': class_file_path, 'use_attr': get_attr}),
+        'awa2': (AnimalDataset, {'root_dir': DATASET_ROOTS['awa2'], 'transform': preprocess, 'class_file': class_file_path, 'baby_vocab': baby_vocab, 'use_attr': get_attr, 'top_n':top_n_desc}),
         'cub': (CUBDataset, {'root_dir': DATASET_ROOTS['cub'], 'transform': preprocess, 'class_file': class_file_path, 'use_attr': get_attr}),
         'imagenet_broden': (ConcatDataset, [
             {'root_dir': DATASET_ROOTS['imagenet_val'], 'transform': preprocess},
@@ -83,7 +83,6 @@ def get_dataset(dataset_name, preprocess=None, class_file_path='classes.txt', ge
             return dataset_class(**kwargs)
     
     raise ValueError(f"Unsupported dataset: {dataset_name}")
-
 
 def clean_class_names(dataset_name, data):
     cleaners = {
@@ -162,99 +161,108 @@ class CUBDataset(Dataset):
             return image, label_id
   
 class AnimalDataset(Dataset):
-    """
-    Dataset for animal classes in AWA2, suitable for zero-shot and generalized zero-shot learning.
-    Handles datasets with optional attributes and supports data augmentations.
-
-    Attributes:
-        root_dir (Path): The root directory of the dataset.
-        transform (callable): A function/transform that takes in a PIL image and returns a transformed version.
-        class_file (str): File path to the class file, which lists all classes.
-        use_attr (bool): Whether to use attributes associated with classes.
-        continuous (bool): Whether the attributes/class matrix are continuous.
-    """
-    def __init__(self, root_dir, transform=None, class_file=None, use_attr=False, continuous=False):
+    def __init__(self, root_dir, transform=None, class_file=None, baby_vocab=False, use_attr=False, continuous=True):
         self.root_dir = Path(root_dir)
         self.transform = transform
         self.class_file = class_file
         self.use_attr = use_attr
         self.continuous = continuous
+        # load all classes
+        self.full_classes = self.load_full_class_info()
+
         self.attribute_file = self.load_attribute_file()
+        self.attribute_matrix = self.load_cls_attr_matrix()
+        self.vocab = self.load_vocab() if baby_vocab else {}
+        if baby_vocab:
+            self.filter_vocab() # updae full_classes, attribute_file, attribute_matrix
 
-        self.classes = self.load_class_file()
-        self.cls_attr_mat = self.load_cls_attr_matrix(continuous) if use_attr else None
-        self.class_descriptions = self.generate_class_description() if use_attr else None
-        self.img_paths, self.img_indexes = self.load_images()
+        # Filter classes and prepare internal mappings
+        self.classes, self.index_map = self.filter_classes_and_attributes()
+        self.clean_cls_names = self.clean_class_names()
+        self.class_descriptions = self.generate_class_descriptions()
 
-    def load_class_file(self):
-        class_path = self.root_dir / self.class_file
-        class_data = pd.read_csv(class_path, sep='\t', header=None)
-        if class_data.shape[1] == 1:
-            classes = pd.read_csv(class_path, header=None, names=['class_name'])
-            classes['class_index'] = range(1, len(classes) + 1)
-        else:
-            classes = class_data
-            classes.columns = ['class_index', 'class_name']
-        return classes
+        # Load images
+        self.img_paths, self.img_labels = self.load_images()
+
+    def load_vocab(self):
+        with open("multimodal/vocab.json", 'r') as f:
+            return json.load(f)
+    
+    def filter_vocab(self):
+        self.attribute_file = self.attribute_file[self.attribute_file['attribute_name'].isin(self.vocab)]
+        valid_attribute_indices = self.attribute_file.index.tolist()
+
+        self.attribute_matrix = self.attribute_matrix[:, valid_attribute_indices]
+        # Filter classes based on the vocab
+        valid_class_names = set(self.full_classes['class_name']) & set(self.vocab)  # Ensure only classes in vocab are kept
+        self.full_classes = self.full_classes[self.full_classes['class_name'].isin(valid_class_names)]
+
+    def load_full_class_info(self):
+        class_path = self.root_dir / 'classes.txt'
+        return pd.read_csv(class_path, sep='\t', header=None, names=['class_index', 'class_name'])
 
     def load_attribute_file(self):
-        attr_path = self.root_dir / 'predicates.txt' 
-        return pd.read_csv(attr_path, sep='\t', header=None, names=['attribute_index', 'attribute_name'])
-    
-    def load_cls_attr_matrix(self, continuous):
-        dtype = 'float' if continuous else 'int'
-        attr_file = 'predicate-matrix-continuous.txt' if continuous else 'predicate-matrix-binary.txt'
-        return np.array(np.genfromtxt(self.root_dir / attr_file, dtype=dtype))
+        attr_path = self.root_dir / 'predicates.txt'
+        attr_data = pd.read_csv(attr_path, sep='\t', header=None, names=['attribute_index', 'attribute_name'])
+        return attr_data.reset_index(drop=True)
 
-    def generate_class_description(self):
-        def attributes_to_text(attributes_vector):
-            if self.continuous:
-                threshold = np.mean(attributes_vector) # threshold for continuous attributes
-                descriptions = [desc for attr, desc in zip(attributes_vector, self.attribute_file['attribute_name']) if attr > threshold]
-            else:
-                descriptions = [desc for attr, desc in zip(attributes_vector, self.attribute_file['attribute_name']) if attr == 1]
-            return descriptions
+    def load_cls_attr_matrix(self):
+        matrix_file = 'predicate-matrix-continuous.txt' if self.continuous else 'predicate-matrix-binary.txt'
+        return np.genfromtxt(self.root_dir / matrix_file, dtype='float' if self.continuous else 'int')
 
-        return [attributes_to_text(attr) for attr in self.cls_attr_mat]
+    def clean_class_names(self):
+        return [name.replace('+', ' ') for name in self.classes['class_name']]
     
+    def filter_classes_and_attributes(self):
+        subset_path = self.root_dir / self.class_file
+        subset_classes = pd.read_csv(subset_path, sep='\t', header=None, names=['class_name'])
+        filtered_classes = self.full_classes[self.full_classes['class_name'].isin(subset_classes['class_name'])]
+        return filtered_classes.reset_index(drop=True), {i: idx for i, idx in enumerate(filtered_classes['class_index'])}
+    
+    def generate_class_descriptions(self):
+        descriptions = {}
+        for idx, row in self.classes.iterrows():
+            full_index = row['class_index']
+            attr_vector = self.attribute_matrix[full_index - 1]
+            descriptions[full_index] = ', '.join(self.attributes_to_text(attr_vector))
+        return descriptions
+
+    def attributes_to_text(self, attributes_vector, top_n=11):
+        valid_indices = [i for i, name in enumerate(self.attribute_file['attribute_name']) if not self.vocab or name in self.vocab]
+        filtered_attributes = attributes_vector[valid_indices]
+        filtered_names = [self.attribute_file['attribute_name'].iloc[i] for i in valid_indices]
+
+        if self.continuous:
+            top_indices = np.argsort(filtered_attributes)[-top_n:]
+            return [filtered_names[i] for i in reversed(top_indices)]
+        else:
+            return [name for attr, name in zip(filtered_attributes, filtered_names) if attr == 1]
+
     def load_images(self):
         img_paths = []
-        img_indexes = []
-        for _, row in self.classes.iterrows():
-            class_index = row['class_index']
-            class_name = row['class_name'].replace('+', ' ')
-            folder_dir = self.root_dir / 'JPEGImages' / class_name
-            files = glob(str(folder_dir / '*.jpg'))
-            img_paths.extend(files)
-            img_indexes.extend([class_index] * len(files))
-        return img_paths, img_indexes
+        img_labels = []
+        for idx, row in self.classes.iterrows():
+            class_folder = self.root_dir / 'JPEGImages' / row['class_name'].replace('+', ' ')
+            class_images = glob(str(class_folder / '*.jpg'))
+            img_paths.extend(class_images)
+            img_labels.extend([row['class_index']] * len(class_images))
+        return img_paths, img_labels
 
     def __getitem__(self, idx):
         img_path = self.img_paths[idx]
-        img_index = self.img_indexes[idx] - 1  # Convert 1-based index to 0-based
-
-        image = Image.open(img_path)
-        if image.mode == 'L':
-            image = image.convert('RGB')
-        
+        full_class_index = self.img_labels[idx]
+        image = Image.open(img_path).convert('RGB')
         if self.transform:
             image = self.transform(image)
 
         if self.use_attr:
-            im_attr = self.cls_attr_mat[img_index]
-            class_description = ', '.join(self.class_descriptions[img_index])
-            return image, img_index, class_description, im_attr
-        return image, img_index
+            reverse_index_map = {v: k for k, v in self.index_map.items()}
+            continuous_index = reverse_index_map.get(full_class_index, -1)
+            attributes = self.attribute_matrix[continuous_index] if continuous_index != -1 else None
+            description = self.class_descriptions.get(full_class_index, "")
+            return image, full_class_index, description, attributes
+
+        return image, full_class_index
 
     def __len__(self):
         return len(self.img_paths)
-    
-
-#         if train:
-#             self.data_frame = self.data_frame[self.split['is_train'] == 1]
-#         else:
-#             self.data_frame = self.data_frame[self.split['is_train'] == 0]
-#         # Merge with classes to get class names
-#         self.data_frame = self.data_frame.merge(self.classes, on='class_id')
-#         # Merge with images to get paths
-#         self.data_frame = self.data_frame.merge(self.images, left_on='image_id', right_on='image_index')

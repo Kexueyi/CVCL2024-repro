@@ -162,7 +162,7 @@ class MultiModalLitModel(pl.LightningModule):
 
     def tokenize(self, texts):
         """Tokenize texts to obtain tokens and token lengths"""
-        max_seq_len = 23  # Modified from 25 to adapt to cvcl_vit
+        max_seq_len = 25  # Modified from 25 to adapt to cvcl_vit
 
         if isinstance(texts, str):
             texts = [texts]

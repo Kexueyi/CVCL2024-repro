@@ -7,7 +7,6 @@ import pandas as pd
 import os 
 import datetime
 import json
-from data_utils import clean_class_names
 
 def set_seed(seed):
     random.seed(seed)
@@ -51,7 +50,7 @@ def save_results(args_dict, predictions, labels, similarities, class_names, clea
     dataset = args_dict.get('dataset', 'unknown_data')
     result_dir = args_dict.get('result_dir', './results')
     use_attr = args_dict.get('use_attr', False)
-
+    
     accuracy, class_acc = calculate_accuracy(predictions, labels)
     save_path = os.path.join(result_dir, f"{model}_{dataset}_{datetime.datetime.now().strftime('%m-%d_%H-%M')}")
     os.makedirs(save_path, exist_ok=True)
@@ -66,10 +65,13 @@ def save_results(args_dict, predictions, labels, similarities, class_names, clea
     df_overall = pd.DataFrame({
         "model": [model],
         "dataset": [dataset],
+        "filer_baby": [args_dict.get('baby_vocab', False)],
         "use_attr": [use_attr],
-        "top1_acc": [accuracy]
+        "top_n_desc": [args_dict.get('top_n_desc', 0)],
+        "top1_acc": [accuracy],
+        "time": [datetime.datetime.now().strftime('%m-%d %H:%M')]
     })
-    overall_file = os.path.join(save_path, "overall_acc.csv")
+    overall_file = os.path.join(result_dir, "top-1-acc.csv")
     df_overall.to_csv(overall_file, mode='a', header=not os.path.exists(overall_file), index=False)
     
     # per-class accuracies
@@ -106,29 +108,32 @@ class ZeroShotClassifier:
         self.device = device
         self.model.eval()
 
-    def get_txt_feature(self, clean_cls_name, cls_desc=None, prefix=None, use_attr=False):
+    def get_txt_feature(self, clean_cls_name, cls_desc=None, prefix="", use_attr=False):
         if use_attr:
             if cls_desc is None:
-                raise ValueError("cls_desc must be provided when use_attr is True.")
+                raise ValueError("cls_desc must be provided when use_attr is True.")            
+            combined_texts = [f"{prefix}{name}, {desc}" for name, desc in zip(clean_cls_name, cls_desc.values())]
             if "cvcl" in self.model_name:
-                text_tokens = [self.model.tokenize(f"{prefix}{c}, {d}") for c, d in zip(clean_cls_name, cls_desc)]
+                text_tokens = [self.model.tokenize(text) for text in combined_texts]
             elif "clip" in self.model_name:
-                text_inputs = clip.tokenize([f"{prefix}{c}, {d}" for c, d in zip(clean_cls_name, cls_desc)]).to(self.device)
+                text_inputs = clip.tokenize(combined_texts).to(self.device)
         else:
+            texts = [f"{prefix}{c}" for c in clean_cls_name]
             if "cvcl" in self.model_name:
-                text_tokens = [self.model.tokenize(f"{prefix}{c}") for c in clean_cls_name]
+                text_tokens = [self.model.tokenize(c) for c in texts]
             elif "clip" in self.model_name:
-                text_inputs = clip.tokenize([f"{prefix}{c}" for c in clean_cls_name]).to(self.device)
-        
+                text_inputs = clip.tokenize(texts).to(self.device)
+
         if "cvcl" in self.model_name:
             text_inputs = torch.cat([txt[0] for txt in text_tokens]).to(self.device)
             text_lens = torch.cat([txt[1] for txt in text_tokens]).to(self.device)
             text_features = self.model.encode_text(text_inputs, text_lens)
         elif "clip" in self.model_name:
             text_features = self.model.encode_text(text_inputs)
+
+        normalized_text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+        return normalized_text_features
         
-        return text_features / text_features.norm(dim=-1, keepdim=True)
-    
     def get_img_feature(self, dataloader):
         img_features_list = []
         all_labels_list = []
@@ -144,18 +149,20 @@ class ZeroShotClassifier:
         return norm_img_features, all_labels_tensor
     
     def compute_similarity(self, img_features, text_features):
-        print("Computing Similarity...")
         similarity = (100.0 * img_features @ text_features.T).softmax(dim=-1)
         return similarity
 
-    def predict_labels(self, similarity):
-        return similarity.argmax(dim=-1) # row's max value index
+    def predict_labels(self, similarity, index_map):
+        preds = similarity.argmax(dim=-1)  
+        mapped_preds = [index_map[pred.item()] for pred in preds]
+        return torch.tensor(mapped_preds, device=preds.device)
     
-    def predict(self, dataloader, clean_cls_name, cls_desc=None, prefix=None, use_attr=False):
+    def predict(self, dataloader, prefix=None, use_attr=False):
         with torch.no_grad():
-            text_features = self.get_txt_feature(clean_cls_name, cls_desc, prefix, use_attr)
+            text_features = self.get_txt_feature(dataloader.dataset.clean_cls_names, dataloader.dataset.class_descriptions, prefix, use_attr)
             img_features, all_labels = self.get_img_feature(dataloader)
             similarity = self.compute_similarity(img_features, text_features)
-            all_preds = self.predict_labels(similarity)
-            similarities = similarity.max(dim=1)[0].cpu().numpy() # max value of each row
+            index_map = dataloader.dataset.index_map
+            all_preds = self.predict_labels(similarity, index_map)  # Pass the full_class_indices here
+            similarities = similarity.max(dim=1)[0].cpu().numpy()  # max value of each row
         return similarities, all_preds, all_labels
