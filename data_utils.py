@@ -60,11 +60,11 @@ def get_model(model_name, device):
     
     return model, preprocess
 
-def get_dataset(dataset_name, preprocess=None, class_file_path='classes.txt',baby_vocab=False, get_attr=False, top_n_desc=None):
+def get_dataset(dataset_name, preprocess=None, class_file_path='classes.txt',baby_vocab=False, get_attr=False, top_n=None):
     # dictionary of dataset configurations
     print(f"Loading dataset: {dataset_name}")
     dataset_configs = {
-        'awa2': (AnimalDataset, {'root_dir': DATASET_ROOTS['awa2'], 'transform': preprocess, 'class_file': class_file_path, 'baby_vocab': baby_vocab, 'use_attr': get_attr, 'top_n':top_n_desc}),
+        'awa2': (AnimalDataset, {'root_dir': DATASET_ROOTS['awa2'], 'transform': preprocess, 'class_file': class_file_path, 'baby_vocab': baby_vocab, 'use_attr': get_attr, 'top_n':top_n}),
         'cub': (CUBDataset, {'root_dir': DATASET_ROOTS['cub'], 'transform': preprocess, 'class_file': class_file_path, 'use_attr': get_attr}),
         'imagenet_broden': (ConcatDataset, [
             {'root_dir': DATASET_ROOTS['imagenet_val'], 'transform': preprocess},

@@ -11,7 +11,7 @@ def main(args):
     model, preprocess = get_model(model_name, device)
     classifier = ZeroShotClassifier(model_name, model, device)
     
-    data = get_dataset(args.dataset, preprocess, args.class_file_path, args.baby_vocab, args.use_attr, args.top_n_desc)
+    data = get_dataset(args.dataset, preprocess, args.class_file_path, args.baby_vocab, args.use_attr, top_n = args.top_n_desc)
     dataloader = DataLoader(data, batch_size=args.batch_size, shuffle=False, num_workers=4)
     
     clean_cls, class_names = clean_class_names(args.dataset, data) 
