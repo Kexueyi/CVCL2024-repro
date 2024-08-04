@@ -50,7 +50,7 @@ def save_results(args_dict, predictions, labels, similarities, class_names, clea
     dataset = args_dict.get('dataset', 'unknown_data')
     result_dir = args_dict.get('result_dir', './results')
     use_attr = args_dict.get('use_attr', False)
-    
+    os.makedirs(result_dir, exist_ok=True)
     accuracy, class_acc = calculate_accuracy(predictions, labels)
     # save_path = os.path.join(result_dir, f"{model}_{dataset}_{datetime.datetime.now().strftime('%m-%d_%H-%M')}")
     # os.makedirs(save_path, exist_ok=True)
