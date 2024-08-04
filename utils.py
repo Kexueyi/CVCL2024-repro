@@ -52,8 +52,8 @@ def save_results(args_dict, predictions, labels, similarities, class_names, clea
     use_attr = args_dict.get('use_attr', False)
     
     accuracy, class_acc = calculate_accuracy(predictions, labels)
-    save_path = os.path.join(result_dir, f"{model}_{dataset}_{datetime.datetime.now().strftime('%m-%d_%H-%M')}")
-    os.makedirs(save_path, exist_ok=True)
+    # save_path = os.path.join(result_dir, f"{model}_{dataset}_{datetime.datetime.now().strftime('%m-%d_%H-%M')}")
+    # os.makedirs(save_path, exist_ok=True)
 
     if isinstance(predictions, torch.Tensor):
         predictions = predictions.cpu().numpy()
@@ -74,32 +74,32 @@ def save_results(args_dict, predictions, labels, similarities, class_names, clea
     overall_file = os.path.join(result_dir, "top-1-acc.csv")
     df_overall.to_csv(overall_file, mode='a', header=not os.path.exists(overall_file), index=False)
     
-    # per-class accuracies
-    df_per_class = pd.DataFrame({
-        "class_id": np.arange(len(class_acc)),
-        "class_name": class_names,
-        "clean_class_name": clean_cls,
-        "top1_acc": class_acc
-    })
-    per_class_file = os.path.join(save_path, "per_class_acc.csv")
-    df_per_class.to_csv(per_class_file, mode='a', header=not os.path.exists(per_class_file), index=False)
+    # # per-class accuracies
+    # df_per_class = pd.DataFrame({
+    #     "class_id": np.arange(len(class_acc)),
+    #     "class_name": class_names,
+    #     "clean_class_name": clean_cls,
+    #     "top1_acc": class_acc
+    # })
+    # per_class_file = os.path.join(save_path, "per_class_acc.csv")
+    # df_per_class.to_csv(per_class_file, mode='a', header=not os.path.exists(per_class_file), index=False)
     
-    # Save predictions with additional details
-    df_predictions = pd.DataFrame({
-        "id": np.arange(len(predictions)),
-        "class_id": labels,
-        "predic_id": predictions,
-        "similarity": similarities
-    })
-    predictions_file = os.path.join(save_path, "predictions.csv")
-    df_predictions.to_csv(predictions_file, mode='a', header=not os.path.exists(predictions_file), index=False)
+    # # Save predictions with additional details
+    # df_predictions = pd.DataFrame({
+    #     "id": np.arange(len(predictions)),
+    #     "class_id": labels,
+    #     "predic_id": predictions,
+    #     "similarity": similarities
+    # })
+    # predictions_file = os.path.join(save_path, "predictions.csv")
+    # df_predictions.to_csv(predictions_file, mode='a', header=not os.path.exists(predictions_file), index=False)
 
-    # Save command-line arguments to JSON
-    args_json_file = os.path.join(save_path, "args.json")
-    with open(args_json_file, 'w') as json_file:
-        json.dump(args_dict, json_file, indent=4)
+    # # Save command-line arguments to JSON
+    # args_json_file = os.path.join(save_path, "args.json")
+    # with open(args_json_file, 'w') as json_file:
+    #     json.dump(args_dict, json_file, indent=4)
 
-    print(f"Results and args saved to {save_path}")
+    # print(f"Results and args saved to {save_path}")
 
 class ZeroShotClassifier:
     def __init__(self, model_name, model, device):
