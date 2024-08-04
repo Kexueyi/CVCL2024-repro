@@ -161,12 +161,13 @@ class CUBDataset(Dataset):
             return image, label_id
   
 class AnimalDataset(Dataset):
-    def __init__(self, root_dir, transform=None, class_file=None, baby_vocab=False, use_attr=False, continuous=True):
+    def __init__(self, root_dir, transform=None, class_file=None, baby_vocab=False, use_attr=False, continuous=True, top_n=None):
         self.root_dir = Path(root_dir)
         self.transform = transform
         self.class_file = class_file
         self.use_attr = use_attr
         self.continuous = continuous
+        self.top_n = top_n
         # load all classes
         self.full_classes = self.load_full_class_info()
 
@@ -224,10 +225,10 @@ class AnimalDataset(Dataset):
         for idx, row in self.classes.iterrows():
             full_index = row['class_index']
             attr_vector = self.attribute_matrix[full_index - 1]
-            descriptions[full_index] = ', '.join(self.attributes_to_text(attr_vector))
+            descriptions[full_index] = ', '.join(self.attributes_to_text(attr_vector, self.top_n))
         return descriptions
 
-    def attributes_to_text(self, attributes_vector, top_n=11):
+    def attributes_to_text(self, attributes_vector, top_n):
         valid_indices = [i for i, name in enumerate(self.attribute_file['attribute_name']) if not self.vocab or name in self.vocab]
         filtered_attributes = attributes_vector[valid_indices]
         filtered_names = [self.attribute_file['attribute_name'].iloc[i] for i in valid_indices]
