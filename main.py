@@ -18,7 +18,7 @@ def main(args):
     
     cls_desc = data.class_descriptions if args.use_attr else None
 
-    similarities, predictions, labels = classifier.predict(dataloader, clean_cls, cls_desc, prefix=args.prefix, use_attr=args.use_attr)
+    similarities, predictions, labels = classifier.predict(dataloader, prefix=args.prefix, use_attr=args.use_attr)
     
     args_dict = vars(args)
     save_results(args_dict, predictions, labels, similarities, class_names, clean_cls)    
