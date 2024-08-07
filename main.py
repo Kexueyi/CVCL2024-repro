@@ -11,25 +11,30 @@ def main(args):
     model, preprocess = get_model(model_name, device)
     classifier = ZeroShotClassifier(model_name, model, device)
     
-    data = get_dataset(args.dataset, preprocess, args.class_file_path, args.baby_vocab, args.use_attr, top_n = args.top_n_desc)
+    data = get_dataset(dataset_name=args.dataset, 
+                       preprocess=preprocess, 
+                       class_file_path=args.class_file, 
+                       baby_vocab=args.baby_vocab, 
+                       get_attr=args.use_attr, 
+                       top_n = args.top_n_desc)
+    
     dataloader = DataLoader(data, batch_size=args.batch_size, shuffle=False, num_workers=4)
-    
-    clean_cls, class_names = clean_class_names(args.dataset, data) 
-    
-    cls_desc = data.class_descriptions if args.use_attr else None
 
-    similarities, predictions, labels = classifier.predict(dataloader, prefix=args.prefix, use_attr=args.use_attr)
+    similarities, predictions, labels, text_combinations = classifier.predict(dataloader=dataloader, prefix=args.prefix, use_attr=args.use_attr)
+    
+    class_names, clean_cls = data.class_names, data.clean_cls_names
+    # print(f"Number of classes: {len(class_names)}")
     
     args_dict = vars(args)
-    save_results(args_dict, predictions, labels, similarities, class_names, clean_cls)    
+    save_results(args_dict, predictions, labels, similarities, class_names, clean_cls, text_combinations)    
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='CVCL-ZeroShot')
     parser.add_argument('--model', type=str, default='cvcl_res', help='Model name')
     parser.add_argument('--dataset', type=str, default='awa2', help='Dataset name')
-    parser.add_argument('--class_file_path', type=str, default='classes.txt', help='Relative Path to class file under dataset folder')
-    parser.add_argument('--baby_vocab', type=bool, default=True, help='Use baby_vocab or not')
-    parser.add_argument('--use_attr', type=bool, default=True, help='Use attributes or not')
+    parser.add_argument('--class_file', type=str, default='classes.txt', help='Relative Path to class file under dataset folder')
+    parser.add_argument('--baby_vocab', action='store_true', default=False, help='Use baby_vocab or not')
+    parser.add_argument('--use_attr', action='store_true', default=False, help='Use attributes or not')
     parser.add_argument('--top_n_desc', type=int, default=5, help='Number of top descriptions to use')
     parser.add_argument(
         '--prefix',

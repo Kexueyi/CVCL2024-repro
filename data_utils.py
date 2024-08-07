@@ -19,7 +19,7 @@ import clip
 DATASET_ROOTS = {"imagenet_val": "/home/Dataset/xueyi/ImageNet100/val",
                 "broden": "/home/xke001/demo/NetDissect-Lite/dataset/broden1_224/images",
                 "cub": "/home/project/12003885/data/CUB/CUB_200_2011",
-                "awa2": "/home/project/12003885/data/Animals_with_Attributes2",
+                "awa2": "/home/Dataset/xueyi/Animals_with_Attributes2",
                 "konk": "/home/project/12003885/data/17-objects",
                 "konk_example": "/home/xke001/demo/CLIP-dissect/data/toy_example_dataset_konka"}
 
@@ -173,16 +173,18 @@ class AnimalDataset(Dataset):
 
         self.attribute_file = self.load_attribute_file()
         self.attribute_matrix = self.load_cls_attr_matrix()
-        self.vocab = self.load_vocab() if baby_vocab else {}
-        if baby_vocab:
+        self.baby_vocab = baby_vocab # boolean flag for baby_vocab
+        self.vocab = self.load_vocab() if baby_vocab else {} # load vocab file
+        if self.baby_vocab:
             self.filter_vocab() # updae full_classes, attribute_file, attribute_matrix
 
         # Filter classes and prepare internal mappings
-        self.classes, self.index_map = self.filter_classes_and_attributes()
-        self.clean_cls_names = self.clean_class_names()
+        self.classes, self.index_map = self.filter_classes_and_attributes() # {filtered index: original class index}
+        self.class_names = self.classes['class_name'].tolist()
+        self.clean_cls_names = self.clean_class_names()  # fed to zero-shot text embedding
         self.class_descriptions = self.generate_class_descriptions()
 
-        # Load images
+        # Load images and labels
         self.img_paths, self.img_labels = self.load_images()
 
     def load_vocab(self):
@@ -195,8 +197,13 @@ class AnimalDataset(Dataset):
 
         self.attribute_matrix = self.attribute_matrix[:, valid_attribute_indices]
         # Filter classes based on the vocab
-        valid_class_names = set(self.full_classes['class_name']) & set(self.vocab)  # Ensure only classes in vocab are kept
-        self.full_classes = self.full_classes[self.full_classes['class_name'].isin(valid_class_names)]
+        baby_class_names = {
+            class_name for class_name in self.full_classes['class_name']
+            if any(
+                sub_name in self.vocab for sub_name in class_name.split('+')  # "siamese+cat" -> ["siamese", "cat"]
+            )
+        }
+        self.full_classes = self.full_classes[self.full_classes['class_name'].isin(baby_class_names)]
 
     def load_full_class_info(self):
         class_path = self.root_dir / 'classes.txt'
@@ -212,7 +219,14 @@ class AnimalDataset(Dataset):
         return np.genfromtxt(self.root_dir / matrix_file, dtype='float' if self.continuous else 'int')
 
     def clean_class_names(self):
-        return [name.replace('+', ' ') for name in self.classes['class_name']]
+        cleaned_class_names = []
+        for name in self.classes['class_name'].tolist():
+            cleaned_name = name.replace('+', ' ')
+            if self.baby_vocab:   # Remove subwords not in the baby vocab
+                subwords = cleaned_name.split()
+                cleaned_name = ' '.join(word for word in subwords if word in self.vocab)
+            cleaned_class_names.append(cleaned_name)
+        return cleaned_class_names
     
     def filter_classes_and_attributes(self):
         subset_path = self.root_dir / self.class_file
@@ -243,7 +257,7 @@ class AnimalDataset(Dataset):
         img_paths = []
         img_labels = []
         for idx, row in self.classes.iterrows():
-            class_folder = self.root_dir / 'JPEGImages' / row['class_name'].replace('+', ' ')
+            class_folder = self.root_dir / 'JPEGImages' / row['class_name']
             class_images = glob(str(class_folder / '*.jpg'))
             img_paths.extend(class_images)
             img_labels.extend([row['class_index']] * len(class_images))
