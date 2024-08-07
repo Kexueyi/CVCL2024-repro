@@ -35,7 +35,7 @@ if __name__ == "__main__":
     parser.add_argument('--class_file', type=str, default='classes.txt', help='Relative Path to class file under dataset folder')
     parser.add_argument('--baby_vocab', action='store_true', default=False, help='Use baby_vocab or not')
     parser.add_argument('--use_attr', action='store_true', default=False, help='Use attributes or not')
-    parser.add_argument('--top_n_desc', type=int, default=5, help='Number of top descriptions to use')
+    parser.add_argument('--top_n_desc', type=int, default=1, help='Number of top descriptions to use')
     parser.add_argument(
         '--prefix',
         type=str,

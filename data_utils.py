@@ -94,6 +94,7 @@ def clean_class_names(dataset_name, data):
     clean_cls = cleaner(data.classes['class_name'].tolist())
     return clean_cls, data.classes['class_name'].tolist()
 
+
 class CUBDataset(Dataset):
     """This contains all train/test classes in CUB dataset."""
     def __init__(self, root_dir,  transform=None, use_attr=False):
@@ -165,6 +166,7 @@ class AnimalDataset(Dataset):
         self.root_dir = Path(root_dir)
         self.transform = transform
         self.class_file = class_file
+        
         self.use_attr = use_attr
         self.continuous = continuous
         self.top_n = top_n
@@ -173,10 +175,13 @@ class AnimalDataset(Dataset):
 
         self.attribute_file = self.load_attribute_file()
         self.attribute_matrix = self.load_cls_attr_matrix()
+        
         self.baby_vocab = baby_vocab # boolean flag for baby_vocab
-        self.vocab = self.load_vocab() if baby_vocab else {} # load vocab file
         if self.baby_vocab:
+            self.vocab = self.load_vocab()
             self.filter_vocab() # updae full_classes, attribute_file, attribute_matrix
+        else:
+            self.vocab = []
 
         # Filter classes and prepare internal mappings
         self.classes, self.index_map = self.filter_classes_and_attributes() # {filtered index: original class index}
@@ -189,13 +194,13 @@ class AnimalDataset(Dataset):
 
     def load_vocab(self):
         with open("multimodal/vocab.json", 'r') as f:
-            return json.load(f)
+            return list(json.load(f).keys()) # return list of baby vocabularies
     
     def filter_vocab(self):
         self.attribute_file = self.attribute_file[self.attribute_file['attribute_name'].isin(self.vocab)]
-        valid_attribute_indices = self.attribute_file.index.tolist()
+        baby_attr_indices = self.attribute_file.index.tolist()
 
-        self.attribute_matrix = self.attribute_matrix[:, valid_attribute_indices]
+        self.attribute_matrix = self.attribute_matrix[:, baby_attr_indices]
         # Filter classes based on the vocab
         baby_class_names = {
             class_name for class_name in self.full_classes['class_name']
@@ -224,7 +229,8 @@ class AnimalDataset(Dataset):
             cleaned_name = name.replace('+', ' ')
             if self.baby_vocab:   # Remove subwords not in the baby vocab
                 subwords = cleaned_name.split()
-                cleaned_name = ' '.join(word for word in subwords if word in self.vocab)
+                # ['siamese+cat', 'persian+cat'] -> ['cat', 'cat'] but different indices
+                cleaned_name = ' '.join(word for word in subwords if word in self.vocab) 
             cleaned_class_names.append(cleaned_name)
         return cleaned_class_names
     
