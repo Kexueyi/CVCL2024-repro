@@ -15,14 +15,15 @@ from multimodal.multimodal_lit import MultiModalLitModel
 from huggingface_hub import hf_hub_download
 import clip
 
-# dataset path
-DATASET_ROOTS = {"imagenet_val": "/home/Dataset/xueyi/ImageNet100/val",
-                "broden": "/home/xke001/demo/NetDissect-Lite/dataset/broden1_224/images",
-                "cub": "/home/project/12003885/data/CUB/CUB_200_2011",
-                "awa2": "/home/Dataset/xueyi/Animals_with_Attributes2",
-                "konk": "/home/project/12003885/data/17-objects",
-                "konk_example": "/home/xke001/demo/CLIP-dissect/data/toy_example_dataset_konka"}
+data_root = os.getenv("DATA_ROOT", default="/home/Dataset/xueyi")
 
+DATASET_ROOTS = {
+    "imagenet_val": os.path.join(data_root, "ImageNet100/val"),
+    "broden": os.path.join(data_root, "broden1_224/images"),
+    "cub": os.path.join(data_root, "CUB_200_2011"),
+    "awa2": os.path.join(data_root, "Animals_with_Attributes2"),
+    "konk": os.path.join(data_root, "17-objects"),
+}
 
 def get_model(model_name, device):
     """returns target model and its preprocess function"""

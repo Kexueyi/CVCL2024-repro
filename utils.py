@@ -129,6 +129,7 @@ class ZeroShotClassifier:
             elif "clip" in self.model_name:
                 text_inputs = clip.tokenize(text_combinations).to(self.device)
         else:
+            text_combinations = [f"{prefix}{name}" for name in clean_cls_name]
             texts = [f"{prefix}{c}" for c in clean_cls_name]
             if "cvcl" in self.model_name:
                 text_tokens = [self.model.tokenize(c) for c in texts]
