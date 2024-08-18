@@ -1,7 +1,8 @@
 import argparse
 from torch.utils.data import DataLoader
-from data_utils import get_model, get_dataset, clean_class_names
-from utils import set_seed, ZeroShotClassifier, save_results
+from utils.data_utils import get_model, get_dataset
+from utils.utilities import set_seed, save_results
+from models.gzs_predic import ZeroShotClassifier
 
 def main(args):
     set_seed(args.seed)
