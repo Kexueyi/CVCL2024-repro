@@ -1,19 +1,22 @@
-from tqdm import tqdm
-import clip
+import os
 import torch
-import random
 import numpy as np
 import pandas as pd
-import os 
 import datetime
 import json
+from huggingface_hub import hf_hub_download
+import clip
+import re
+import random
+
+vocab_cache = None
 
 def set_seed(seed):
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
-
+    
 def get_activation(outputs, mode):
     '''
     Extracts activations with specified pooling mode (avg or max).
@@ -62,8 +65,7 @@ def calculate_accuracy(predictions, labels):
 
     return accuracy, class_acc
 
-
-def save_results(args_dict, predictions, labels, similarities, class_names, clean_cls, text_combinations):
+def save_attr_results(args_dict, predictions, labels, similarities, class_names, clean_cls, text_combinations):
     """
     Save overall results and per-class accuracies to separate CSV files, 
 
@@ -81,6 +83,12 @@ def save_results(args_dict, predictions, labels, similarities, class_names, clea
     result_dir = args_dict.get('result_dir', './results')
     use_attr = args_dict.get('use_attr', False)
     class_file = args_dict.get('class_file', 'classes.txt')
+    
+    current_script_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_script_dir)  # Moving up one directory level
+    result_dir = os.path.join(parent_dir, result_dir)  # Joining the parent directory with the result_dir
+
+
     os.makedirs(result_dir, exist_ok=True)
     accuracy, class_acc = calculate_accuracy(predictions, labels)
     save_path = os.path.join(result_dir, f"{model}_{dataset}_{datetime.datetime.now().strftime('%m-%d_%H-%M')}")
@@ -138,3 +146,54 @@ def save_results(args_dict, predictions, labels, similarities, class_names, clea
 
     print(f"Results and args saved to {save_path}")
     
+def save_trial_results(args_dict, accuracy, cls_accuracy):
+    results = {
+        'args': args_dict,           
+        'overall_accuracy': accuracy,  
+        'class_accuracy': cls_accuracy 
+    }
+
+    filename = f"trial_{datetime.datetime.now().strftime('%m-%d %H:%M')}.json"
+      
+    results_dir ='results'
+    os.makedirs(results_dir, exist_ok=True)
+
+    filepath = os.path.join(results_dir, filename)
+
+    with open(filepath, 'w') as file:
+        json.dump(results, file, indent=4)
+
+    print(f"Results saved successfully to {filepath}")
+    
+def load_baby_vocab():
+    global vocab_cache
+    if vocab_cache is not None:
+        return vocab_cache
+    with open("multimodal/vocab.json", 'r') as f:
+        vocab_cache = set(json.load(f).keys())
+    return vocab_cache
+
+def vocab_class_filter(class_names, vocab_set, match_type='full'):
+    if match_type == 'partial':
+        return list({class_name for class_name in class_names if set(re.compile(r'\W+').split(class_name)) & vocab_set})
+    elif match_type == 'full':
+        return list({class_name for class_name in class_names if class_name in vocab_set})
+
+def get_baby_filter_class(class_names):
+    vocab = load_baby_vocab()
+    return vocab_class_filter(class_names, vocab, match_type='full')
+
+def clean_class_names(dataset_name, data):
+    cleaners = {
+        'cub': lambda names: [name.split(".")[1] for name in names], # _ still remains
+        'awa2': lambda names: [name.replace("+", " ") for name in names], 
+        # 'awa2': lambda names: [re.sub(r'^.*\+', '', name) for name in names],
+    }
+    cleaner = cleaners.get(dataset_name, lambda names: names)
+    clean_cls = cleaner(data.classes['class_name'].tolist())
+    return clean_cls, data.classes['class_name'].tolist()
+
+def get_class_names(data_root_dir):
+    subfolders = [name for name in os.listdir(data_root_dir)
+                  if os.path.isdir(os.path.join(data_root_dir, name))]
+    return subfolders

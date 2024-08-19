@@ -1,7 +1,7 @@
 import argparse
 from torch.utils.data import DataLoader
-from utils.data_utils import get_model, get_dataset
-from utils.utilities import set_seed, save_results
+
+from utils import get_model, get_dataset, set_seed, save_attr_results
 from models.gzs_predic import ZeroShotClassifier
 
 def main(args):
@@ -9,11 +9,11 @@ def main(args):
     device = args.device
     
     model_name = args.model
-    model, preprocess = get_model(model_name, device)
+    model, transform = get_model(model_name, device)
     classifier = ZeroShotClassifier(model_name, model, device)
     
     data = get_dataset(dataset_name=args.dataset, 
-                       preprocess=preprocess, 
+                       transform=transform, 
                        class_file_path=args.class_file, 
                        baby_vocab=args.baby_vocab, 
                        get_attr=args.use_attr, 
@@ -27,7 +27,7 @@ def main(args):
     # print(f"Number of classes: {len(class_names)}")
     
     args_dict = vars(args)
-    save_results(args_dict, predictions, labels, similarities, class_names, clean_cls, text_combinations)    
+    save_attr_results(args_dict, predictions, labels, similarities, class_names, clean_cls, text_combinations)    
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='CVCL-ZeroShot')
