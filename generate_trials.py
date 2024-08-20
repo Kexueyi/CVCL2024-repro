@@ -6,9 +6,11 @@ from tqdm import tqdm
 
 from utils import load_baby_vocab, vocab_class_filter, set_seed
 
-SEED = 42
-NUM_TRIALS = 200
+SEED = 43
+# NUM_TRIALS = 200
 NUM_FOILS = 3
+NUM_TRIALS_PER_IMAGE = 5
+
 set_seed(SEED)
 
 # os.chdir('..') # Change working directory to the root directory of the project
@@ -69,7 +71,7 @@ def load_image_paths(file_path):
 
 #     return trials
 
-def generate_trials(all_images, num_trials_per_image=5, num_foils=NUM_FOILS):
+def generate_trials(all_images, num_trials_per_image=NUM_TRIALS_PER_IMAGE, num_foils=NUM_FOILS):
     '''Generates trials for each image in each class.
     Args:
         num_trials_per_image: Number of trials to generate for each image.
@@ -110,4 +112,5 @@ filtered_classes = vocab_class_filter(class_names, vocab_set, match_type='full')
 all_images = collect_all_class_images(data_root_dir, filtered_classes)
 # save_image_paths(all_images, 'object_images.json')
 trials = generate_trials(all_images)
-save_trials(trials, f'datasets/trials/object_{NUM_TRIALS}_{NUM_FOILS}_{SEED}.json')
+save_trials(trials, f'datasets/trials/object_{NUM_TRIALS_PER_IMAGE}_{NUM_FOILS}_{SEED}.json')
+# save_trials(trials, f'datasets/trials/object_{NUM_TRIALS}_{NUM_FOILS}_{SEED}.json')

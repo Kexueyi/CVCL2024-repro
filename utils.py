@@ -150,8 +150,8 @@ def save_trial_results(args_dict, accuracy, cls_accuracy):
         'overall_accuracy': accuracy,  
         'class_accuracy': cls_accuracy 
     }
-
-    filename = f"trial_{datetime.datetime.now().strftime('%m-%d_%H:%M')}.json"
+    seed = args_dict.get('seed', 0)
+    filename = f"trial_{seed}_{datetime.datetime.now().strftime('%m-%d_%H:%M')}.json"
       
     results_dir ='results'
     os.makedirs(results_dir, exist_ok=True)
