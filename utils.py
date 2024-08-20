@@ -4,8 +4,6 @@ import numpy as np
 import pandas as pd
 import datetime
 import json
-from huggingface_hub import hf_hub_download
-import clip
 import re
 import random
 
@@ -153,7 +151,7 @@ def save_trial_results(args_dict, accuracy, cls_accuracy):
         'class_accuracy': cls_accuracy 
     }
 
-    filename = f"trial_{datetime.datetime.now().strftime('%m-%d %H:%M')}.json"
+    filename = f"trial_{datetime.datetime.now().strftime('%m-%d_%H:%M')}.json"
       
     results_dir ='results'
     os.makedirs(results_dir, exist_ok=True)

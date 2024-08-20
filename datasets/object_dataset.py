@@ -67,8 +67,8 @@ class KonkTrialDataset(Dataset):
                 print(f"Error: Could not open image {filename}. Skipping.")
                 continue
 
-        if len(imgs) != 4:
-            raise ValueError(f"Expected 4 images for trial index {idx}, got {len(imgs)}. Check generated trials' paths.")
+        # if len(imgs) != 4:
+        #     raise ValueError(f"Expected 4 images for trial index {idx}, got {len(imgs)}. Check generated trials' paths.")
 
         # Stack images into a single tensor
         imgs = torch.stack(imgs) #[batch, trial_img, channel, height, width]

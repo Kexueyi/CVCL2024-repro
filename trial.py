@@ -27,7 +27,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='CVCL-ZeroShot')
     parser.add_argument('--model', type=str, default='cvcl_res', help='Model name')
     parser.add_argument('--dataset', type=str, default='object-trial', help='Dataset name')
-    parser.add_argument('--trials_file', type=str, default='datasets/trials/object_trials_42.json', help='Relative Path to json trial file')
+    parser.add_argument('--trials_file', type=str, default='datasets/trials/object_img_5_3_42.json', help='Relative Path to json trial file')
     parser.add_argument('--batch_size', type=int, default=64, help='Batch size for dataloader')
     parser.add_argument('--device', type=str, default='cuda', help='Device to run the model')
     parser.add_argument('--seed', type=int, default=42, help='Random seed for reproducibility')

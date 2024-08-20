@@ -1,0 +1,722 @@
+[
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTERFL.jpg",
+        "target_category": "butterfly1",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/dog/Adog86.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bird/Abird26.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/camera/ACAMERA71.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTERFL.jpg",
+        "target_category": "butterfly1",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/sandwich/menu_chicken_sandwich.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/dog/Adog94.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/microwave/microwave_smll.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTERFL.jpg",
+        "target_category": "butterfly1",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/tricycle/tricycle-chain-1.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/apple/apples-grannysmith.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/hairbrush/serenity2000-canada_1903_2658146.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTERFL.jpg",
+        "target_category": "butterfly1",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/cheese/roquefort.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/balloon/Aballoon104.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/camera/ACAMERA88.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTERFL.jpg",
+        "target_category": "butterfly1",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/fan/511976_sk_lg.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/airplane/AAIRPLNJ2.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/leaves/22802318.thl.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTFL13.jpg",
+        "target_category": "butterfly2",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bed/41tExEsn-gL._AA262_.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/airplane/AMILIPL58.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/shoe/Awomansshoe4.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTFL13.jpg",
+        "target_category": "butterfly2",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/desk/ADESK11.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bird/Abird27.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/turtle/turtle3.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTFL13.jpg",
+        "target_category": "butterfly2",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/scissors/5_Lister_Bandage_Scissor.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/apple/AAPPLE2.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/airplane/AAIRPLNJ2.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTFL13.jpg",
+        "target_category": "butterfly2",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/sandwich/TestItems/TeriyakiChicken-01.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/tricycle/main_21.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/toothpaste/toothpaste03.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTFL13.jpg",
+        "target_category": "butterfly2",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bike/folding_bike_dahon.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/stool/ASTOOL44.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/knife/new10.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTFL18.jpg",
+        "target_category": "butterfly3",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/stool/ASTOOL44.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/key/keynew01.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/clock/26373229.thl.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTFL18.jpg",
+        "target_category": "butterfly3",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/guitar/AELCGUI12.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/socks/Blue-PinkHorseSocks.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/stamp/timbre_UIT_1.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTFL18.jpg",
+        "target_category": "butterfly3",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/broom/26466712.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bowl/Awhitebowl2.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/tree/APALMTREE.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTFL18.jpg",
+        "target_category": "butterfly3",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bed/51Mhaa73IRL._AA262_.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/apple/Aredapple5.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bird/Abird7.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTFL18.jpg",
+        "target_category": "butterfly3",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/phone/Atelephone4.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/chair/AARMCHA31.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/jacket/15861964.thl.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/AGRAPHEND.jpg",
+        "target_category": "butterfly4",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/sandwich/TunaHoneyOat-01.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/watch/AL0004-03E_MED.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bike/LashOutBike4.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/AGRAPHEND.jpg",
+        "target_category": "butterfly4",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bird/26392638.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/knife/new02.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/sofa/AREDCOUC5.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/AGRAPHEND.jpg",
+        "target_category": "butterfly4",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/backpack/22895348.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/knife/new03.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bird/Abird22.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/AGRAPHEND.jpg",
+        "target_category": "butterfly4",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/tree/ATREE12.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/cat/ATABBCAT.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/scissors/silk crane.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/AGRAPHEND.jpg",
+        "target_category": "butterfly4",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/phone/AFAXPHON6.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/crib/AFG Amy 4 in 1 Convertible Crib.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/sofa/AREDCOUC5.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket94.jpg",
+        "target_category": "bucket5",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/tricycle/main_21.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/jacket/26373983.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/chair/ATHRONE6.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket94.jpg",
+        "target_category": "bucket5",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/coin/ABARBCOIN.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/hat/ABLUEHAT.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/backpack/TestItems/Abackpack9.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket94.jpg",
+        "target_category": "bucket5",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/coin/ATHAICOIN.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/broom/26440790.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/watch/HEU0102124_zoom.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket94.jpg",
+        "target_category": "bucket5",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/watch/AL0004-03E_MED.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/jacket/22881348.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/shoe/AWSHOES4.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket94.jpg",
+        "target_category": "bucket5",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/turtle/turtle.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/spoon/33r.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/apple/Aapple39.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket113.jpg",
+        "target_category": "bucket6",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/dog/Adog120.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/pipe/APIPE43.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/phone/26379371.thl.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket113.jpg",
+        "target_category": "bucket6",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/backpack/TestItems/Abackpack14.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/shoe/ALADYSHOE.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bike/LashOutBike4.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket113.jpg",
+        "target_category": "bucket6",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/chair/ACHAIR122.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/phone/AFAXPHON6.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/tree/APINETREE.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket113.jpg",
+        "target_category": "bucket6",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/ring/fancy_ring_pink.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/sofa/ACOUCH14.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bowl/TestItems/ABOWL9.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket113.jpg",
+        "target_category": "bucket6",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/tricycle/TestItems/road-hog-pedal-tricycle-classic-trike-vintage-bike-ride-on-toy.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/tree/TestItems/ATREE18.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/phone/26377681.thl.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket176.jpg",
+        "target_category": "bucket7",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/scissors/scissor1.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bench/APARKBE14.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/stamp/manuoceane-timbre-tux-2542.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket176.jpg",
+        "target_category": "bucket7",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/microwave/4807614_640.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/pipe/APIPE50.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/ball/Aball15.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket176.jpg",
+        "target_category": "bucket7",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/pizza/23037964.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/backpack/TestItems/Abackpack9.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/cake/26372608.thl.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket176.jpg",
+        "target_category": "bucket7",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/cookie/shortbread.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/broom/3494.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bird/birdnew03.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket176.jpg",
+        "target_category": "bucket7",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/pants/CHINO PANTS-b.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/tricycle/Michigan20Tricycle20Photo.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/pen/Montblanc-Blu-Starwalker-BP copy.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket130.jpg",
+        "target_category": "bucket8",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/toothpaste/r-1.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/rock/AROCK23.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/tree/AAUTTREE.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket130.jpg",
+        "target_category": "bucket8",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bottle/AWINEBOTT.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/broom/26466711.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/tree/APALMTRE3.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket130.jpg",
+        "target_category": "bucket8",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/desk/0051507b.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/juice/32YG5.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/clock/Aclock258.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket130.jpg",
+        "target_category": "bucket8",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/dog/Asharpeidog.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/ring/Agoldring5.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/stool/ASTOOL42.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/bucket/Abucket130.jpg",
+        "target_category": "bucket8",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bottle/Abottle52.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/cookie/sugarsprinkle.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/kayak/stearns-pivot-ww-400.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467362.thl.jpg",
+        "target_category": "button9",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/chair/ATHRONE6.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/hairbrush/Hairbrush.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/juice/IGYOG.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467362.thl.jpg",
+        "target_category": "button9",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/tricycle/tricycle_542.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/stool/ASTOOL38.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/watch/snl003_MED.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467362.thl.jpg",
+        "target_category": "button9",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bottle/APERFBOT9.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/ring/ROOPL0040.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/crib/AFG Amy 4 in 1 Convertible Crib.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467362.thl.jpg",
+        "target_category": "button9",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bed/51BSS7H4S1L._AA262_.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/guitar/AELCGUITA.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/jacket/16232951.thl.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467362.thl.jpg",
+        "target_category": "button9",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/hat/Aformalhat5.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/pants/WKP-001-1.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/juice/7N9EV.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467345.thl.jpg",
+        "target_category": "button10",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/tricycle/t_500.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bird/TestItems/Abird44.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/hairbrush/hairbrush12.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467345.thl.jpg",
+        "target_category": "button10",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/leaves/ALEAF38.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/socks/3pptotbaby_socks.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/sandwich/60321 GE 7-24-6 -0093.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467345.thl.jpg",
+        "target_category": "button10",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/phone/26379320.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/balloon/Aballoon29.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/ball/26379425.thl.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467345.thl.jpg",
+        "target_category": "button10",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/dog/Alabradordog.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/ABUTTFL18.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/apple/AAPPLE10.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467345.thl.jpg",
+        "target_category": "button10",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bell/LF-42BELL-RG.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/broom/8019375.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/tree/ATREE10.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26388354.thl.jpg",
+        "target_category": "button11",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/camera/AANTCAME5.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bench/26419540.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/spoon/33r.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26388354.thl.jpg",
+        "target_category": "button11",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/socks/Ssocks.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/cat/british-blue-cat-6244.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/jacket/22881156.thl.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26388354.thl.jpg",
+        "target_category": "button11",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/watch/B0000X04VC.01-A4LKQQKJ91IUZ._AA280_SCLZZZZZZZ_.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/umbrella/GoLiteSilverUmbrella.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/apple/apples-grannysmith.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26388354.thl.jpg",
+        "target_category": "button11",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/dog/ADOG18.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/cat/TestItems/domestic-cat-26189.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bed/51442C3RKNL._AA262_.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26388354.thl.jpg",
+        "target_category": "button11",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/stool/ASTOOL46.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/pipe/APIPE50.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/hat/Acasualhat5.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467358.thl.jpg",
+        "target_category": "button12",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/guitar/ACLASSIC5.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/dog/Adog120.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/microwave/beyond-smart-microwave-oven.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467358.thl.jpg",
+        "target_category": "button12",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/chair/AROCKCH51.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/butterfly/BirdwingButterflyMale_big.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/turtle/Pic 12 - Western Herman's Tortoise - Evan D..jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467358.thl.jpg",
+        "target_category": "button12",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/pants/denim-for-immortality-jeans-venus-sky-blue-jeans1.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/pen/Montblanc-Blu-Starwalker-BP copy.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/camera/ACAMRA358.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467358.thl.jpg",
+        "target_category": "button12",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/dog/Asharpeidog.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/socks/W90258.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/sofa/HENRY-Sofa-falg8068-05-72X34X34.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/button/26467358.thl.jpg",
+        "target_category": "button12",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/shoe/ALADYSHOE.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/spoon/33r.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/stamp/512px-Stamp_Irl_68b.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/spoon3.jpg",
+        "target_category": "spoon13",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bowl/Abowl50.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bike/Folding_Bike.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/cat/adventure-kitten.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/spoon3.jpg",
+        "target_category": "spoon13",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/fan/TestItems/20282.fpx.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bottle/Abottle52.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/coin/AAUSSCHIL.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/spoon3.jpg",
+        "target_category": "spoon13",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/jacket/TestItems/15860097.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bird/Abird19.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/leaves/ALEAF38.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/spoon3.jpg",
+        "target_category": "spoon13",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/scissors/scissor2.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/clock/26379142.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/train/images-products-childcraft-g83501.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/spoon3.jpg",
+        "target_category": "spoon13",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/toothpaste/BMXEN.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/hairbrush/B0006BKG7U.01-A1NDBS7YGOPBD6._SCLZZZZZZZ_SS500_.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/cookie/Peanut Butter Cookie.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/cuillere-africaine-dan-ca.jpg",
+        "target_category": "spoon14",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bed/51+sTDQKX-L._AA262_.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/train/train3.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/sofa/APEACHLOV.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/cuillere-africaine-dan-ca.jpg",
+        "target_category": "spoon14",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/toothpaste/BMXEN.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/cookie/8027495.thl-1.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bowl/Abowl59.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/cuillere-africaine-dan-ca.jpg",
+        "target_category": "spoon14",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/watch/snl003_MED.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/broom/BROOM.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/pants/MWP-008-1.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/cuillere-africaine-dan-ca.jpg",
+        "target_category": "spoon14",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/crib/crib-thumb.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/basket/Abasket60.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/pants/im022f3b98590b96f05.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/cuillere-africaine-dan-ca.jpg",
+        "target_category": "spoon14",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/tree/APINETREE.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/stool/ASTOOL42.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/scissors/scissor5.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/060350.jpg",
+        "target_category": "spoon15",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bowl/Abowl52.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/rock/APUMROCK.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/key/TestItems/26418050.thl.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/060350.jpg",
+        "target_category": "spoon15",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/guitar/AELCGUI14.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bird/birdnew04.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/basket/Abasket41.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/060350.jpg",
+        "target_category": "spoon15",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bird/Abird41.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/watch/TestItems/Quartz_Analog_Watches.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/turtle/TestItems/ThreeToedBoxTurtleWHTTu_DcR06.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/060350.jpg",
+        "target_category": "spoon15",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/watch/B00020ODHO.01-A2E7J74KJYV9ZH._AA280_SCLZZZZZZZ_V65957276_.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bell/Abell50.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/guitar/epiphone-jack-casady-electric-rock-bass-guitar.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/060350.jpg",
+        "target_category": "spoon15",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/camera/ACAMR3511.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/desk/ADESK11.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/pipe/APIPE44.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/cuilllercuiller.jpg",
+        "target_category": "spoon16",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/fan/n_hsf.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/cake/26372608.thl.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/jacket/TestItems/15860097.thl.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/cuilllercuiller.jpg",
+        "target_category": "spoon16",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/stool/ASTOOL46.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/stamp/stamp.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/shoe/Arunningshoe9.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/cuilllercuiller.jpg",
+        "target_category": "spoon16",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/train/train1.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/ball/TestItems/ABLUEBALL.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/balloon/Aballoon154.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/cuilllercuiller.jpg",
+        "target_category": "spoon16",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/toothpaste/toothpaste1.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/pipe/APIPE46.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bird/TestItems/Abird24.jpg"
+        ]
+    },
+    {
+        "target_img_filename": "/home/Dataset/xueyi/KonkLab/17-objects/spoon/cuilllercuiller.jpg",
+        "target_category": "spoon16",
+        "foil_img_filenames": [
+            "/home/Dataset/xueyi/KonkLab/17-objects/bike/the-go-bike.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/toothpaste/kt7328.jpg",
+            "/home/Dataset/xueyi/KonkLab/17-objects/bell/ABELL3.jpg"
+        ]
+    }
+]

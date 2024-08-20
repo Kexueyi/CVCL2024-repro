@@ -40,7 +40,6 @@ class ZSTrialClassifier:
     def predict(self, dataloader):
         correct_pred = 0
         total_pred = 0
-        # correct_cls_pred, total_cls_predic= {classname: 0 for classname in dataloader.dataset.class_names}
         correct_cls_pred = defaultdict(int)
         total_cls_predic = defaultdict(int)
 
@@ -49,34 +48,33 @@ class ZSTrialClassifier:
                 batch_size, per_trial_img_num, channels, height, width = imgs.size()
                 imgs = imgs.view(-1, channels, height, width)  # Flatten the trials into the batch dimension
 
-                img_features = self.get_img_feature(imgs)  # Get image features
-                img_features = img_features.view(batch_size, per_trial_img_num, -1)  # Reshape back to separate trials
-                img_features = self.norm_features(img_features) 
+                img_features = self.get_img_feature(imgs)  # [64*4, 512]
+                img_features = img_features.view(batch_size, per_trial_img_num, -1)  
+                img_features = self.norm_features(img_features) # [64, 4, 512]
 
-                txt_features = self.get_txt_feature(label)  # Get text features for each label
-                txt_features = txt_features.unsqueeze(1).expand(-1, per_trial_img_num, -1)  # Expand text features across trials
+                txt_features = self.get_txt_feature(label)  # [64, 512]
                 txt_features = self.norm_features(txt_features) 
-
+                txt_features = txt_features.unsqueeze(1) # [64, 1, 512]
+                
                 # Calculate the cosine similarity
-                similarity = (100.0 * img_features @ txt_features.transpose(-2, -1)).softmax(dim=-1)  # Calculate softmax over the trial dimension
-
+                similarity = (100.0 * img_features @ txt_features.transpose(-2, -1)).softmax(dim=-2)  # [64, 4, 1]
+                similarity = similarity.squeeze(-1) # Remove the last dimension
+                
                 for i in range(batch_size):
                     simil = similarity[i]  # Get the similarity scores for the i-th item in the batch
-                    predic_idx = simil.argmax(dim=-1)  # Find the index of the max similarity score for each trial
+                    predic_idx = simil.argmax().item()  # Find the index of the max similarity score for each trial
 
-                    if predic_idx == 0:  # Assuming the target correct image is at index 0
+                    if predic_idx == 0:  # gt is the first image
                         correct_pred += 1
                         correct_cls_pred[label[i]] += 1
                     total_pred += 1
                     total_cls_predic[label[i]] += 1
 
-                
         # Calculate overall accuracy
         acc = correct_pred / total_pred if total_pred > 0 else 0
 
         # Calculate per-class accuracy
         cls_acc = {cls: (correct_cls_pred[cls] / total_cls_predic[cls] if total_cls_predic[cls] > 0 else 0) for cls in total_cls_predic}
-
         return acc, cls_acc
 
             
