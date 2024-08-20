@@ -16,7 +16,8 @@ def main(args):
         print(f"Using provided trial: {trial_path}")
     else:
         generator = TrialGenerator(args.data_dir, args.seed)
-        _, trial_path = generator.get_trials()  
+        trial_path = generator.get_trials()  
+        args.trial_path = trial_path
         
     ## STEP 2: Load model, and load dataset from json trial file
     model_name = args.model
@@ -30,6 +31,7 @@ def main(args):
     ## STEP 4: Predict the trial results
     acc, cls_acc = classifier.predict(dataloader=dataloader)
     
+    ## STEP 5: Save the results
     args_dict = vars(args)
     save_trial_results(args_dict, acc, cls_acc)  
 

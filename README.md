@@ -11,7 +11,7 @@ This code tries to reproduce the 2024 Vong, W. K. et al. paper: [Grounded langua
 
 Since we don't have the direct access to exact [SAYCam-S](https://pubmed.ncbi.nlm.nih.gov/34485795/) dataset that was used in the paper, but this paper provide generalization example on [KonkObject](http://olivalab.mit.edu/MM/archives/ObjectCategories.zip) dataset(["Massive Memory" Object Categories](https://konklab.fas.harvard.edu/#)), we follow their way to prepare the data and evaluate the model for zero-shot object recognition under a [special setting](####trial-zero-shot).
 
-1. Download the [KonkObject](http://olivalab.mit.edu/MM/archives/ObjectCategories.zip) dataset and [Classes](http://olivalab.mit.edu/MM/downloads/MM2-Ranks.xls).
+1. Download the [KonkObject](http://olivalab.mit.edu/MM/archives/ObjectCategories.zip) dataset and [Classes](http://olivalab.mit.edu/MM/downloads/MM2-Ranks.xls), move classes to your dataset folder.
 2. Update paths in run.sh.
 
 #### Trial Zero-shot: A Special Setting
@@ -21,40 +21,40 @@ In contrast traditional generalized zero-shot learning, this study define zero-s
 3. Get max similarity score in this 4-choose-1 trial.
 
 #### Generate Trials 
-We generate trials for the KonkObject dataset as described in the supplementary materials, producing 5 trials per image and 85 trials per category, 5440 trials in total. Details can be found in `generate_trials.py`.
+We generate trials for the KonkObject dataset as described in paper's supplementary material, after filtering using baby's vocabulary, producing 5 trials per image and 85 trials per category, 5440 trials in total. Details can be found in `generate_trials.py`.
 
 ### Run
 
-To reproduce the classficiation and generalization examples on generate trials and get zero-shot-trial results, run the following command:
+To reproduce the get zero-shot-trial results, simply run the following command:
 
 ```bash
-$ ./run.sh
+$ ./repro.sh
 ```
+To reproduce from trial generation to final results, run the following command:
+
+```bash
+$ rm dataset/trials/*.json
+$ ./repro.sh
+```
+Generated trials can be found in `dataset/trials` folder.
 Results can be found in `results` folder.
 
 #### Repro Class-wise Accuracy
 After running `run.sh`(run on 5 seeds), use `repro_plt.ipynb` to reproduce the class-wise accuracy as shown in the original study (Fig.3.A).
 
-![class accuracy](figs/class_acc_ori.png)
 
 In repro plt:
 1. Get box plt of class-wise accuracy of CVCL for 5 seeds.
 2. Get CLIP & CVCL's total accuracy by avg of 5 seeds for comparison.
 
-![repro class accuracy](figs/class_acc_ori.png)
 
 #### Repro Genralization Example
 
 For generalization examples (Fig.3.B), run the corresponding section in `repro_plt.ipynb`.
 
-![gen_example](figs/gen_example_ori.png)
-
 In repro plt:
 1. Maually select examples appear in the paper, filter out the corresponding trials. 
-2. Get each images zero-shot-trial results and avg for each img get results.
-
-![repro gen_example](figs/gen_example_ori.png)
-
+2. Get each images zero-shot-trial results and avg for each img's trials to get results.
 
 
 ### Open questions
@@ -63,6 +63,7 @@ In repro plt:
 - Given order is different, the distribution and trend of class-wise accuracy are very similar to the paper.
   - Around 1/2 classes performance are close to the baseline(25%).
 - How to reproduce the exact generalization examples' score in the paper?
-  - Since we are doing avg on 5 trials of each images, we can't reach the same score as the paper.(e.g. 53.3%)
+  - Though we are doing avg on 5 trials of each images among all seeds, we can't reach the same score as the paper.(e.g. 53.3%)
+  - And the repro score is lower than the paper's score.
     
 

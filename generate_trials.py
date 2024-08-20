@@ -12,22 +12,27 @@ class TrialGenerator:
         self.seed = seed
         self.num_foils = num_foils
         self.num_trials_per_image = num_trials_per_image
-        set_seed(self.seed)
-        self.trials_file_path = os.path.join(self.root_dir, 'datasets', 'trials', f'object_{self.num_trials_per_image}_{self.num_foils}_{self.seed}.json')
+        self.set_seed()
+        self.trials_file_path = os.path.join('datasets', 'trials', f'object_{self.num_trials_per_image}_{self.num_foils}_{self.seed}.json')
 
+    def set_seed(self):
+        set_seed(self.seed)
+        
     def get_trials(self):
         """Check if trials file exists and generate if not, then return trials path and data."""
         if os.path.exists(self.trials_file_path):
             print(f"Trial file already exists: {self.trials_file_path}, skipping generation.")
+            trials = json.load(open(self.trials_file_path))
             return self.trials_file_path
 
         print("Generating trials...")
+        self.set_seed() 
         filtered_classes = self.filter_classes()
         filtered_imgs = self.get_all_class_images(filtered_classes)
         trials = self.generate_trials(filtered_imgs)
         
         self.save_json(trials, self.trials_file_path)
-        return trials, self.trials_file_path
+        return self.trials_file_path
 
     def filter_classes(self):
         """Filter classes based on the category list and vocabulary."""
@@ -39,25 +44,26 @@ class TrialGenerator:
     def get_all_class_images(self, class_names):
         """Collect images for each class and return a dictionary mapping classes to image paths."""
         all_images = {}
-        for class_name in tqdm(class_names, desc="Collecting class images"):
+        for class_name in tqdm(class_names, desc="Collecting images"):
             class_dir = os.path.join(self.root_dir, class_name)
             if os.path.isdir(class_dir):
                 all_images[class_name] = self.get_images_from_directory(class_dir)
         return all_images
 
     def get_images_from_directory(self, directory, extension='.jpg'):
-        """Collect all images from the specified directory with the given extension."""
+        """Collect all images from the specified directory with the given extension, sorted by filename."""
         image_paths = []
         for root, dirs, files in os.walk(directory):
             for file in files:
                 if file.lower().endswith(extension):
                     image_paths.append(os.path.join(root, file))
         return image_paths
-
+    
     def generate_trials(self, all_images):
         """Generate trials for each image by selecting foils from other classes."""
+        self.set_seed() 
         trials = []
-        all_classes = list(all_images.keys())
+        all_classes = sorted(all_images.keys()) 
 
         for class_name in tqdm(all_classes, desc="Generating trials"):
             images = all_images[class_name]
