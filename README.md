@@ -38,21 +38,22 @@ $ ./repro.sh
 ```
 Generated trials can be found in `dataset/trials` folder.
 Results can be found in `results` folder.
+We evaluate results on 5 seeds, all process are shown below.
 
 #### Repro Class-wise Accuracy
 After running `run.sh`(run on 5 seeds), use `repro_plt.ipynb` to reproduce the class-wise accuracy as shown in the original study (Fig.3.A).
 
-In repro plt:
-1. Get box plt of class-wise accuracy of CVCL for 5 seeds.
-2. Get CLIP & CVCL's total accuracy by avg of 5 seeds for comparison.
+In `repro_plt`:
+1. Get box plot of class-wise accuracy.
+2. Get CLIP & CVCL's total accuracy(all class accuracy).
 
 #### Repro Genralization Example
 
 For generalization examples (Fig.3.B), run the corresponding section in `repro_plt.ipynb`.
 
 In repro plt:
-1. Maually select examples appear in the paper, filter out the corresponding trials. 
-2. Get each images zero-shot-trial results and avg for each img's trials to get results.
+1. Maually select generalization examples appear in the paper, filter out to get corresponding trials.
+2. Get each image zero-shot-trial result by averaging among per-img-trials.
 
 #### Repro Comparison 
 Class-wise accuracy comparison:
@@ -69,6 +70,6 @@ All figures can be found under `figs`.
   - Around 1/2 classes performance are close to the baseline(25%), how does this happen?
 - How to reproduce the exact generalization examples' score in the paper?
   - Though we are doing avg on 5 trials of each images among all seeds, we can't reach the same score as the paper.(e.g. 53.3%)
-  - And our score is lower than the paper's score.
+  - Our repro score is lower than the paper's score.
     
 
