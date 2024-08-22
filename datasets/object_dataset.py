@@ -39,7 +39,7 @@ class KonkObjectDataset(Dataset):
 
     def __len__(self):
         return len(self.data)
-    
+
 class KonkTrialDataset(Dataset):
     def __init__(self, trials_file, transform=None):
         with open(trials_file, 'r') as f:

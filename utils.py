@@ -144,7 +144,10 @@ def save_attr_results(args_dict, predictions, labels, similarities, class_names,
 
     print(f"Results and args saved to {save_path}")
     
-def save_trial_results(args_dict, accuracy, cls_accuracy):
+def save_trial_results(args_dict=None, accuracy=None, cls_accuracy=None):
+    if args_dict is None:
+        args_dict = {}
+    
     results = {
         'args': args_dict,           
         'overall_accuracy': accuracy,  
@@ -162,6 +165,8 @@ def save_trial_results(args_dict, accuracy, cls_accuracy):
         json.dump(results, file, indent=4)
 
     print(f"Results saved successfully to {filepath}")
+    
+    return results
     
 def load_baby_vocab():
     global vocab_cache
@@ -181,17 +186,6 @@ def get_baby_filter_class(class_names):
     vocab = load_baby_vocab()
     return vocab_class_filter(class_names, vocab, match_type='full')
 
-def clean_class_names(dataset_name, data):
-    cleaners = {
-        'cub': lambda names: [name.split(".")[1] for name in names], # _ still remains
-        'awa2': lambda names: [name.replace("+", " ") for name in names], 
-        # 'awa2': lambda names: [re.sub(r'^.*\+', '', name) for name in names],
-    }
-    cleaner = cleaners.get(dataset_name, lambda names: names)
-    clean_cls = cleaner(data.classes['class_name'].tolist())
-    return clean_cls, data.classes['class_name'].tolist()
-
 def get_class_names(data_root_dir):
     subfolders = [name for name in os.listdir(data_root_dir)
                   if os.path.isdir(os.path.join(data_root_dir, name))]
-    return subfolders
