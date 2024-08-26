@@ -16,30 +16,47 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
     
 def get_activation(outputs, mode):
-    '''
-    Extracts activations with specified pooling mode (avg or max).
-    Handles different layer types (CNN, ViT, FC) appropriately.
-    
-    Parameters:
-        outputs (list): Storage for the pooled activations.
-        mode (str): Pooling mode, one of 'avg' or 'max'.
-    '''
-    if mode not in ['avg', 'max']:
-        raise ValueError("Unsupported mode. Choose 'avg' or 'max'")
-    
-    def hook(model, input, output):
-        if len(output.shape) == 4:  # CNN layers
-            pooled_output = output.mean(dim=[2, 3]) if mode == 'avg' else output.amax(dim=[2, 3])
-        elif len(output.shape) == 3:  # ViT
-            pooled_output = output[:, 0]
-        elif len(output.shape) == 2:  # FC layers
-            pooled_output = output
-        else:
-            raise ValueError("Unsupported output shape")
-
-        outputs.append(pooled_output.detach())
-
+    if mode == 'avg':
+        def hook(model, input, output):
+            if len(output.shape) == 4: # CNN layers
+                activation = output.mean(dim=[2, 3]).detach()
+            elif len(output.shape) == 3: # ViT
+                activation = output[:, 0].clone()
+            elif len(output.shape) == 2: # FC layers
+                activation = output.detach()
+            outputs.append(activation)
+    elif mode == 'max':
+        def hook(model, input, output):
+            if len(output.shape) == 4: # CNN layers
+                activation = output.amax(dim=[2, 3]).detach()
+            elif len(output.shape) == 3: # ViT
+                activation = output[:, 0].clone()
+            elif len(output.shape) == 2: # FC layers
+                activation = output.detach()
+            outputs.append(activation)
     return hook
+
+def register_hooks(model, layers, mode = 'avg'):
+    activations = {layer: [] for layer in layers}
+    hooks = {}
+
+    # register forward hook
+    for layer in layers:
+        module = dict(model.named_modules()).get(layer)
+        if module:
+            hooks[layer] = module.register_forward_hook(get_activation(activations[layer], mode))
+            # print(f"Hook registered for layer: {layer}")
+        # else:
+            # print(f"Warning: Layer '{layer}' does not exist in the model.")
+
+    return activations, hooks
+
+def remove_hooks(hooks):
+    for layer in hooks:
+        hooks[layer].remove()
+        # print(f"Hook removed for layer: {layer}")
+    
+    # torch.cuda.empty_cache()
 
 def calculate_accuracy(predictions, labels):
     predictions = predictions.cpu()
