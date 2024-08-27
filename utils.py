@@ -15,39 +15,46 @@ def set_seed(seed):
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     
-def get_activation(outputs, mode):
-    if mode == 'avg':
-        def hook(model, input, output):
-            if len(output.shape) == 4: # CNN layers
-                activation = output.mean(dim=[2, 3]).detach()
-            elif len(output.shape) == 3: # ViT
-                activation = output[:, 0].clone()
-            elif len(output.shape) == 2: # FC layers
-                activation = output.detach()
-            outputs.append(activation)
-    elif mode == 'max':
-        def hook(model, input, output):
-            if len(output.shape) == 4: # CNN layers
-                activation = output.amax(dim=[2, 3]).detach()
-            elif len(output.shape) == 3: # ViT
-                activation = output[:, 0].clone()
-            elif len(output.shape) == 2: # FC layers
-                activation = output.detach()
-            outputs.append(activation)
+def get_activation(outputs, mode, keep_trial_dim=False):
+    def hook(model, input, output):
+        if keep_trial_dim:
+            # [batch_size, Number of trial imgs, Number of Neurons, H, W]
+            batch_size, per_trial_img_num = input[0].size(0)//4, 4
+        if len(output.shape) == 4:  # CNN layers
+            if keep_trial_dim:
+                # keep batch and trial dimension
+                activation = output.view(batch_size, per_trial_img_num, output.size(1), output.size(2), output.size(3))
+                if mode == 'avg':
+                    activation = activation.mean(dim=[3, 4])
+                elif mode == 'max':
+                    activation = activation.amax(dim=[3, 4])
+            else:
+                if mode == 'avg':
+                    activation = output.mean(dim=[2, 3])
+                elif mode == 'max':
+                    activation = output.amax(dim=[2, 3])
+            activation = activation.detach()
+        elif len(output.shape) == 3:  # ViT
+            activation = output[:, 0].clone()
+        elif len(output.shape) == 2:  # FC layers
+            activation = output.detach()
+
+        outputs.append(activation)
+
     return hook
 
-def register_hooks(model, layers, mode = 'avg'):
+def register_hooks(model, layers, mode='avg', keep_trial_dim=False):
     activations = {layer: [] for layer in layers}
     hooks = {}
 
-    # register forward hook
+    # Register forward hook
     for layer in layers:
         module = dict(model.named_modules()).get(layer)
         if module:
-            hooks[layer] = module.register_forward_hook(get_activation(activations[layer], mode))
+            hooks[layer] = module.register_forward_hook(get_activation(activations[layer], mode, keep_trial_dim))
             # print(f"Hook registered for layer: {layer}")
-        # else:
-            # print(f"Warning: Layer '{layer}' does not exist in the model.")
+        else:
+            print(f"Warning: Layer '{layer}' does not exist in the model.")
 
     return activations, hooks
 

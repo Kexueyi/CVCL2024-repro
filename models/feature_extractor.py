@@ -23,15 +23,29 @@ class FeatureExtractor:
             txt_features = self.model.encode_text(tokens)
         return txt_features
     
-    def get_concept_feature(self, concepts): # pass composed concepts
-        concepts = concepts.to(self.device)
-        concept_features = self.get_txt_feature(concepts)
+    def get_concept_features(self, concepts):
+        batch_size = len(concepts) 
+        img_per_trial = len(concepts[0])  
+
+        batch_trial_features = []
+
+        # over same img_idx within trials in a batch
+        for img_idx in range(img_per_trial):
+            img_idx_concepts = [concepts[batch_index][img_idx] for batch_index in range(batch_size)]
+
+            img_idx_features = self.get_txt_feature(img_idx_concepts)
+            
+            batch_trial_features.append(img_idx_features)
+
+        concept_features = torch.stack(batch_trial_features).permute(1, 0, 2)
+
         return concept_features
-        
+    
     def get_img_feature(self, imgs):
         imgs = imgs.to(self.device)  
         img_features = self.model.encode_image(imgs)
         return img_features
     
     def norm_features(self, features):
-        return features / features.norm(dim=-1, keepdim=True)
+        # norm txt img feature on feature dim
+        return features / features.norm(dim=-1, keepdim=True)  

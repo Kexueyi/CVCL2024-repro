@@ -29,7 +29,7 @@ def get_model(model_name, device):
         elif "vit" in model_name:
             backbone = "vit" #  ViT-B/14 
         else:
-            print("Invalid backbone, set to resnext50")
+            print("Unknown backbone, set to default resnext50")
             backbone = "resnext50"
         checkpoint_name = f"cvcl_s_dino_{backbone}_embedding" 
         checkpoint = hf_hub_download(repo_id="wkvong/"+checkpoint_name, filename=checkpoint_name+".ckpt")

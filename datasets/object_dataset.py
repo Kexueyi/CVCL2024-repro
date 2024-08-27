@@ -71,7 +71,7 @@ class KonkTrialDataset(Dataset):
         #     raise ValueError(f"Expected 4 images for trial index {idx}, got {len(imgs)}. Check generated trials' paths.")
 
         # Stack images into a single tensor
-        imgs = torch.stack(imgs) #[batch, trial_img, channel, height, width]
+        imgs = torch.stack(imgs) #[batch_size, number_of_trial_imgs, channel, height, width]
 
         label = trial["target_category"]
         return imgs, label
