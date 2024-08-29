@@ -24,7 +24,7 @@ def get_model(model_name, device):
     """returns target model and its transform function"""
     if "cvcl" in model_name:  
         print("Loading CVCL...")
-        if "res" in model_name:
+        if "resx" in model_name:
             backbone = "resnext50" # ResNeXt-50 32x4d 
         elif "vit" in model_name:
             backbone = "vit" #  ViT-B/14 
@@ -39,7 +39,10 @@ def get_model(model_name, device):
         
     elif "clip" in model_name:
         print("Loading CLIP...")
-        backbone = "ViT-L/14" # source: CVCL Supplementary Materials
+        if "res" in model_name:
+            backbone = "RN50" 
+        else:
+            backbone = "ViT-L/14" # source: CVCL Supplementary Materials
         model, transform = clip.load(f"{backbone}", device=device)
         print(f"Successfully loaded CLIP-{backbone}")
     

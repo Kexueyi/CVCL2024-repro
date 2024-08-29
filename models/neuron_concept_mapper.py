@@ -18,7 +18,7 @@ class NeuronConceptMapper:
             mapping[layer][neuron] = {'concept': concept, 'similarity': similarity}
         return mapping
 
-    def get_concepts(self, activations, top_k=2, thres_param=None):
+    def get_concepts(self, activations, top_k, thres_param=None):
         self.batch_size = next(iter(activations.values())).shape[0]
         if activations[next(iter(activations.keys()))].ndim > 2:
             self.imgs_per_trial = next(iter(activations.values())).shape[1]

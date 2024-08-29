@@ -70,7 +70,7 @@ class ZSTrialPredic:
                     if all(item.shape == activations[layer][0].shape for item in activations[layer]):
                         activations[layer] = torch.stack(activations[layer])
                         activations[layer] = torch.squeeze(activations[layer], 0)  # Squeeze the first dimension        
-                concept_info = mapper.get_concepts(activations, top_k=2, thres_param=None)
+                concept_info = mapper.get_concepts(activations, top_k=top_k, thres_param=None)
                 remove_hooks(hooks)
 
                 all_concept_info[batch_idx] = concept_info

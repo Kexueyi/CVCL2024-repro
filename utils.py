@@ -6,8 +6,13 @@ import datetime
 import json
 import re
 import random
+from PIL import Image
 
 vocab_cache = None
+
+# object image arguments
+IMAGE_H = 224
+IMAGE_W = 224
 
 def set_seed(seed):
     random.seed(seed)
@@ -213,3 +218,14 @@ def get_baby_filter_class(class_names):
 def get_class_names(data_root_dir):
     subfolders = [name for name in os.listdir(data_root_dir)
                   if os.path.isdir(os.path.join(data_root_dir, name))]
+    return subfolders # as list of class names
+    
+def resize_object_img(img_filename):
+
+    img = Image.open(img_filename)
+    img = img.resize((int(IMAGE_W / 2), int(IMAGE_H / 2)), Image.BICUBIC)
+    new_img = Image.new('RGB', (IMAGE_W, IMAGE_H), 'white')
+    # paste on a white background
+    new_img.paste(img, (int(IMAGE_W / 4), int(IMAGE_H / 4)))
+
+    return new_img

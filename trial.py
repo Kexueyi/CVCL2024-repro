@@ -51,7 +51,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='CVCL-TrialZeroShot')
     parser.add_argument('--model', type=str, default='cvcl_res', help='Model name')
     parser.add_argument('--data_dir', type=str, default='/home/Dataset/xueyi/KonkLab/17-objects', help='Dataset root directory')
-    parser.add_argument('--batch_size', type=int, default=32, help='Batch size for dataloader')
+    parser.add_argument('--batch_size', type=int, default=64, help='Batch size for dataloader')
     parser.add_argument('--device', type=str, default='cuda', help='Device to run the model')
     parser.add_argument('--seed', type=int, default=42, help='Random seed for reproducibility')
     parser.add_argument('--layers', type=str, default="vision_encoder.model.layer1,vision_encoder.model.layer2,vision_encoder.model.layer3,vision_encoder.model.layer4",help='List of layers to consider for concept mapping')
