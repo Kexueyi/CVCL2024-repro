@@ -229,3 +229,46 @@ def resize_object_img(img_filename):
     new_img.paste(img, (int(IMAGE_W / 4), int(IMAGE_H / 4)))
 
     return new_img
+
+def get_class_overall_acc(files):
+    class_acc = []
+    overall_acc = {}
+
+    # load dir files
+    for file in files:
+        try:
+            with open(file, 'r') as f:
+                data = json.load(f)
+                print(json.dumps(data, indent=4)) 
+                # find model type
+                model_type = data['args']['model']
+                if model_type not in overall_acc:
+                    overall_acc[model_type] = []
+                overall_acc[model_type].append(data['overall_accuracy'])
+
+                seed = data['args']['seed']
+                for category, accuracy in data['class_accuracy'].items():
+                    class_acc.append({
+                        'Category': category,
+                        'Accuracy': accuracy,
+                        'Seed': seed,
+                        'Model': model_type
+                    })
+                    print(f"Added: Category={category}, Accuracy={accuracy}, Seed={seed}, Model={model_type}")  
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"Error reading {file}: {str(e)}")
+
+    # avg class acc on different seeds
+    df_class = pd.DataFrame(class_acc)
+    df_class = df_class.groupby(['Category', 'Model']).agg(Mean_Accuracy=('Accuracy', 'mean')).reset_index().sort_values(by='Mean_Accuracy', ascending=False)
+
+    # avg overall acc on different seeds
+    overall_results = [{'Model': model, 'Overall_Mean_Accuracy': sum(acc) / len(acc) if acc else 0} for model, acc in overall_acc.items()]
+    df_overall = pd.DataFrame(overall_results)
+
+    return df_class, df_overall
+
+def get_sorted_categories(df):
+    # Calculate median accuracy per category
+    sorted_categories = df.groupby('Category')['Accuracy'].mean().sort_values(ascending=False)
+    return sorted_categories.index.tolist()

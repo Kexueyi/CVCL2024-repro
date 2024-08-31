@@ -17,7 +17,7 @@ class ZSTrialPredic:
         total_cls_predic = defaultdict(int)
 
         with torch.no_grad():
-            for imgs, label in tqdm(dataloader, desc="Evaluating"):
+            for imgs, label in tqdm(dataloader, desc="Trial Prediction"):
                 batch_size, per_trial_img_num, channels, height, width = imgs.size()
                 imgs = imgs.view(-1, channels, height, width)  # Flatten the trials into the batch dimension
 
@@ -57,7 +57,7 @@ class ZSTrialPredic:
         total_cls_predic = defaultdict(int)
         all_concept_info = {}
         with torch.no_grad():
-            for batch_idx, (imgs, labels) in enumerate(tqdm(dataloader)):
+            for batch_idx, (imgs, labels) in enumerate(tqdm(dataloader, desc="Trial Prediction with Neuron Concepts")):
                 activations, hooks = register_hooks(self.model, layers, mode='avg', keep_trial_dim=True) 
                 batch_size, per_trial_img_num, channels, height, width = imgs.size()
                 imgs = imgs.view(-1, channels, height, width)

@@ -38,6 +38,7 @@ def main(args):
         mapper = NeuronConceptMapper(args.map_file)
         layers = args.layers.split(",")
         acc, cls_acc, all_concept_info = classifier.predict_with_concepts(dataloader, layers, mapper, args.top_k)
+        # save concept infos
         with open(f'concepts_{args.seed}_{datetime.datetime.now().strftime("%m_%d_%H:%M")}.json', 'w') as json_file:
             json.dump(all_concept_info, json_file, indent=4)
     else: 
@@ -54,8 +55,8 @@ if __name__ == "__main__":
     parser.add_argument('--batch_size', type=int, default=64, help='Batch size for dataloader')
     parser.add_argument('--device', type=str, default='cuda', help='Device to run the model')
     parser.add_argument('--seed', type=int, default=42, help='Random seed for reproducibility')
+    
     parser.add_argument('--layers', type=str, default="vision_encoder.model.layer1,vision_encoder.model.layer2,vision_encoder.model.layer3,vision_encoder.model.layer4",help='List of layers to consider for concept mapping')
-
     parser.add_argument('--top_k', type=int, help='Top k concepts to consider')
     parser.add_argument('--map_file', type=str, help='Path to the neuron concept mapping file')
     
