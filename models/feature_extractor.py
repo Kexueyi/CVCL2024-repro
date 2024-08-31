@@ -9,9 +9,12 @@ class FeatureExtractor:
         self.device = device
         self.model.eval()
 
-    def get_txt_feature(self, label):
+    def get_txt_feature(self, label, without_eossos=False):
         if "cvcl" in self.model_name:
-            tokens, token_len = self.model.tokenize(label)  # Separate the tokenization from the device transfer
+            if without_eossos:
+                tokens, token_len = self.model.tokenize_without_eos_sos(label)  # Separate the tokenization from the device transfer
+            else:
+                tokens, token_len = self.model.tokenize(label)  # Separate the tokenization from the device transfer
             tokens = tokens.to(self.device)
             if isinstance(token_len, torch.Tensor):
                 token_len = token_len.to(self.device)

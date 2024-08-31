@@ -160,7 +160,7 @@ class MultiModalLitModel(pl.LightningModule):
         text_features, _ = self.model.encode_text(y, y_len)
         return text_features
 
-    def tokenize(self, texts):
+    def tokenize_without_eos_sos(self, texts):
         """Tokenize texts to obtain tokens and token lengths without using <sos> and <eos>"""
         max_seq_len = 25  # Maximum sequence length
 
@@ -184,30 +184,31 @@ class MultiModalLitModel(pl.LightningModule):
         tokens = torch.tensor(all_tokens, dtype=torch.long)
         token_lengths = torch.tensor(token_lengths, dtype=torch.long)
         return tokens, token_lengths
-    # def tokenize(self, texts):
-    #     """Tokenize texts to obtain tokens and token lengths"""
-    #     max_seq_len = 25  # Modified from 25 to adapt to cvcl_vit
+    
+    def tokenize(self, texts):
+        """Tokenize texts to obtain tokens and token lengths"""
+        max_seq_len = 25  # Modified from 25 to adapt to cvcl_vit
 
-    #     if isinstance(texts, str):
-    #         texts = [texts]
+        if isinstance(texts, str):
+            texts = [texts]
 
-    #     all_tokens = []
-    #     token_lengths = [] # modified ===>
-    #     for text in texts:
-    #         doc = self.nlp(text)
-    #         tokens = [token.text for token in doc]
-    #         # Start and end tokens added here
-    #         tokens = [self.vocab["<sos>"]] + [self.vocab.get(token, self.vocab["<unk>"]) for token in tokens] + [self.vocab["<eos>"]]
-    #         # Calculate effective length before padding
-    #         effective_length = min(len(tokens), max_seq_len)
-    #         tokens = tokens[:effective_length]  # Truncate if necessary
-    #         tokens += [self.vocab["<pad>"]] * (max_seq_len - effective_length)  # Pad the tokens to max_seq_len
-    #         all_tokens.append(tokens)
-    #         token_lengths.append(effective_length)
+        all_tokens = []
+        token_lengths = [] # modified ===>
+        for text in texts:
+            doc = self.nlp(text)
+            tokens = [token.text for token in doc]
+            # Start and end tokens added here
+            tokens = [self.vocab["<sos>"]] + [self.vocab.get(token, self.vocab["<unk>"]) for token in tokens] + [self.vocab["<eos>"]]
+            # Calculate effective length before padding
+            effective_length = min(len(tokens), max_seq_len)
+            tokens = tokens[:effective_length]  # Truncate if necessary
+            tokens += [self.vocab["<pad>"]] * (max_seq_len - effective_length)  # Pad the tokens to max_seq_len
+            all_tokens.append(tokens)
+            token_lengths.append(effective_length)
 
-    #     tokens = torch.tensor(all_tokens, dtype=torch.long)
-    #     token_lengths = torch.tensor(token_lengths, dtype=torch.long) # modified <====
-    #     return tokens, token_lengths 
+        tokens = torch.tensor(all_tokens, dtype=torch.long)
+        token_lengths = torch.tensor(token_lengths, dtype=torch.long) # modified <====
+        return tokens, token_lengths 
 
     # def tokenize(self, texts):
     #     """Tokenize texts to obtain tokens and token lengths"""

@@ -13,7 +13,7 @@ class TrialGenerator:
         self.num_foils = num_foils
         self.num_trials_per_image = num_trials_per_image
         self.set_seed()
-        self.trials_file_path = os.path.join('datasets', 'trials', f'object_{self.num_trials_per_image}_{self.num_foils}_{self.seed}.json')
+        self.trials_file_path = os.path.join('trials', f'object_{self.seed}.json')
 
     def set_seed(self):
         set_seed(self.seed)
@@ -36,10 +36,11 @@ class TrialGenerator:
 
     def filter_classes(self):
         """Filter classes based on the category list and vocabulary."""
-        df = pd.read_excel(os.path.join(self.root_dir, 'MM2-Ranks.xls'))
-        class_names = df['Category'].tolist()
         vocab_set = set(load_baby_vocab())
-        return vocab_class_filter(class_names, vocab_set, match_type='full')
+        all_entries = os.listdir(self.root_dir)
+        class_names = [entry for entry in all_entries if os.path.isdir(os.path.join(self.root_dir, entry))]
+        filtered_classname = vocab_class_filter(class_names, vocab_set, match_type='full')
+        return filtered_classname
 
     def get_all_class_images(self, class_names):
         """Collect images for each class and return a dictionary mapping classes to image paths."""

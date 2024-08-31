@@ -5,8 +5,6 @@ import clip
 from torchvision import datasets
 from torch.utils.data import ConcatDataset
 from multimodal.multimodal_lit import MultiModalLitModel
-from datasets.awa2_dataset import AnimalDataset
-from datasets.cub_dataset import CUBDataset
 from datasets.object_dataset import KonkTrialDataset
 
 data_root = os.getenv("DATA_ROOT", default="/home/Dataset/xueyi")
@@ -65,8 +63,6 @@ def get_dataset(dataset_name, **kwargs):
     
     # Dictionary of dataset configurations
     dataset_configs = {
-        'awa2': (AnimalDataset, {'root_dir': DATASET_ROOTS['awa2'], **kwargs}),
-        'cub': (CUBDataset, {'root_dir': DATASET_ROOTS['cub'], **kwargs}),
         'object-trial': (KonkTrialDataset, {**kwargs}),
         'imagenet_broden': (ConcatDataset, [
             {'root_dir': DATASET_ROOTS['imagenet_val'], **kwargs},
