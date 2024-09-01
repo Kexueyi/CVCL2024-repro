@@ -1,6 +1,8 @@
 # Trials
-- `report_trials.json` is the given trial file, originally named `eval_object_categories.json`
-- `resized_object_0.json` is DIY trials, using resized images.
+- `reported_trials.json` is the given trial file, originally named `eval_object_categories.json`
+- `reported_trials_no_resize.json` is the given trial file, but using original images
+- `resized_object_0.json` is DIY trials, generated from seed 0, using resized images.
+- `object_0.json` is DIY trials, generated from seed 0, simply using original images.
 
 ### DIY Trials:
 This directory contains the trials that were created by `generate_trials.py` script.

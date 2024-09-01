@@ -5,6 +5,18 @@
 
 This code tries to reproduce the 2024 Vong, W. K. et al. paper: [Grounded language acquisition through the eyes and ears of a single child](https://www.science.org/doi/abs/10.1126/science.adi1374). This study uses a CLIP-like Model trained on visual-linguistic data([SAYCam-S](https://pubmed.ncbi.nlm.nih.gov/34485795/)) from a single child to show how basic representation can be learned from infant's everyday sensory input.
 
+## Updates
+
+### 2024-09-01
+- **New Results**:
+  - Apply image resize, original trial, remove `<eos><sos>` in tokenizer.
+  - Analysis these 3 factors' impact on zero-shot-trial results.
+Detials can be found in `repro_plt_latest.ipynb`.
+ 
+
+---
+## Previous Repro
+Below are previous repro detials, using our DIY trials.
 ## Prerequisites
 
 #### Prepare dataset
@@ -12,7 +24,7 @@ This code tries to reproduce the 2024 Vong, W. K. et al. paper: [Grounded langua
 Since we don't have the direct access to exact [SAYCam-S](https://pubmed.ncbi.nlm.nih.gov/34485795/) dataset that was used in the paper, but this paper provide generalization example on [KonkObject](http://olivalab.mit.edu/MM/archives/ObjectCategories.zip) dataset(["Massive Memory" Object Categories](https://konklab.fas.harvard.edu/#)), we follow their way to prepare the data and evaluate the model for zero-shot object recognition under a [special setting](####trial-zero-shot).
 
 1. Download the [KonkObject](http://olivalab.mit.edu/MM/archives/ObjectCategories.zip) dataset and [Classes](http://olivalab.mit.edu/MM/downloads/MM2-Ranks.xls), move classes to your dataset folder.
-2. Update paths in run.sh.
+2. Update paths in `repro.sh`.
 
 #### Trial Zero-shot: A Special Setting
 In contrast traditional generalized zero-shot learning, this paper define zero-shot "trials" as follows:
@@ -22,6 +34,8 @@ In contrast traditional generalized zero-shot learning, this paper define zero-s
 
 #### Generate Trials 
 We generate trials for the KonkObject dataset as described in paper's supplementary material, after filtering using baby's vocabulary, producing 5 trials per image and 85 trials per category, 5440 trials in total. Details can be found in `generate_trials.py`.
+
+Generated trials can be foun in `trials/DIY_trials` folder. Detials can be found in `trials/README.md`.
 
 ## Run
 
